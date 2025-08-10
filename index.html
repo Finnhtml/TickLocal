@@ -321,6 +321,19 @@
             display: none;
             margin-bottom: 1.5rem;
             animation: scanResultFadeIn 0.5s ease-out;
+            transition: all 0.3s ease;
+        }
+        
+        #scanResult.success {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            border-color: #48bb78;
+            box-shadow: 0 8px 32px rgba(72, 187, 120, 0.3);
+        }
+
+        #scanResult.error {
+            background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+            border-color: #e53e3e;
+            box-shadow: 0 8px 32px rgba(229, 62, 62, 0.3);
         }
 
         @keyframes scanResultFadeIn {
@@ -682,6 +695,164 @@
             0% { box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3); }
             100% { box-shadow: 0 8px 35px rgba(102, 126, 234, 0.5); }
         }
+
+        /* NEUE CSS-Regeln für den Fehler-Report-Button */
+        #open-report-button {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 999;
+            width: 60px; /* Kleinere Startgröße */
+            height: 60px;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 50%; /* Runde Form */
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: 600;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-decoration: none;
+        }
+
+        #open-report-button:hover {
+            box-shadow: 0 8px 35px rgba(102, 126, 234, 0.5);
+            transform: translateY(-4px) scale(1.05);
+        }
+        
+        /* Zustand, wenn der Text eingeblendet wird */
+        #open-report-button.expanded {
+            width: 200px; /* Größere Breite mit Text */
+            border-radius: 30px;
+            padding: 1rem 1.5rem;
+        }
+
+        #open-report-button span {
+            display: none; /* Text standardmäßig versteckt */
+            margin-left: 0.5rem;
+            font-size: 1rem;
+        }
+        
+        /* Zustand, wenn der Text angezeigt wird */
+        #open-report-button.expanded span {
+            display: inline;
+        }
+        
+        /* Stil des Modal-Containers */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        /* Inhalt des Modals */
+        .modal-content {
+            background-color: #fefefe;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            animation: modalFadeIn 0.3s ease-out;
+            border: 1px solid #e2e8f0;
+            margin: auto;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Schließen-Button */
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: #000;
+            text-decoration: none;
+        }
+
+        /* Formular-Elemente im Modal */
+        .modal-content form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-content label {
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .modal-content input[type="text"], 
+        .modal-content textarea, 
+        .modal-content select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-family: inherit;
+        }
+
+        .modal-content textarea {
+            resize: vertical;
+        }
+
+        .modal-content button[type="submit"] {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .modal-content button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 14px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Anpassung für kleinere Bildschirme */
+        @media (max-width: 768px) {
+            .modal-content {
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+        }
     </style>
 </head>
 <body>
@@ -775,6 +946,39 @@
             </div>
         </div>
     </div>
+    
+    <button id="open-report-button">🐞<span>Fehler melden</span></button>
+
+    <div id="report-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2>Fehler melden</h2>
+        <p>Bitte beschreibe das Problem so detailliert wie möglich. Deine Daten werden anonymisiert übermittelt.</p>
+        
+        <form id="my-form" action="https://formspree.io/f/xeozvlbr" method="POST">
+          <label for="error-type">Art des Problems:</label>
+          <select name="Art des Problems" id="error-type" required>
+            <option value="visueller_fehler">Visueller Fehler (Darstellung)</option>
+            <option value="funktionaler_fehler">Funktionaler Fehler (Button, Link funktioniert nicht)</option>
+            <option value="performance_problem">Performance-Problem (Seite ist langsam)</option>
+            <option value="inhaltlicher_fehler">Inhaltlicher Fehler (Tippfehler, falsche Info)</option>
+            <option value="sonstiges">Sonstiges</option>
+          </select>
+
+          <label for="description">Beschreibung des Fehlers:</label>
+          <textarea id="description" name="Beschreibung des Fehlers" placeholder="Bitte beschreibe den Fehler hier so genau wie möglich." rows="5" required></textarea>
+
+          <label for="page-url">Seite, auf der das Problem auftrat (optional):</label>
+          <input type="text" id="page-url" name="Seite" placeholder="z.B. https://deine-website.de/seite-xy" />
+
+          <label for="browser-info">Welchen Browser nutzt du? (optional)</label>
+          <input type="text" id="browser-info" name="Browser" placeholder="z.B. Chrome, Firefox, Safari" />
+          
+          <button id="my-form-button" type="submit">Senden</button>
+          <p id="my-form-status"></p>
+        </form>
+      </div>
+    </div>
 
     <div id="scannerMode">
         <div id="reader"></div>
@@ -783,11 +987,16 @@
         <button onclick="showExitPinInput()">Scan-Modus beenden</button>
     </div>
 
+    <audio id="successSound" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" preload="auto"></audio>
+    <audio id="errorSound" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" preload="auto"></audio>
+
     <script src="https://unpkg.com/html5-qrcode"></script>
     <script>
         let eventData = { name: '', date: '', pin: '', tickets: [] };
         let html5QrCode;
         let currentStep = 1;
+        const successSound = document.getElementById('successSound');
+        const errorSound = document.getElementById('errorSound');
 
         // Initialisierung beim Laden der Seite
         document.addEventListener('DOMContentLoaded', () => {
@@ -966,113 +1175,165 @@
             try {
                 localStorage.setItem('tickLocalEventData', JSON.stringify(eventData));
             } catch (e) {
-                showMessage("Speichern fehlgeschlagen.", "error");
+                showMessage("Fehler beim Speichern der Daten. Der Browser-Speicher ist möglicherweise voll.", "error");
             }
         }
 
         function startScanner() {
-            if (!eventData.name || !eventData.pin) {
-                showMessage("Bitte erstelle zuerst ein Event mit PIN.", "warning");
+            if (!eventData.pin) {
+                showMessage("Bitte erstelle zuerst ein Event und setze eine PIN.", "warning");
                 return;
             }
+            document.getElementById('scannerMode').style.display = 'flex';
 
-            document.getElementById("scannerMode").style.display = "flex";
-            document.getElementById("exitPinInput").style.display = "none";
-
-            if (html5QrCode) {
-                html5QrCode.stop().catch(err => console.warn("Scanner stoppen:", err));
-            }
-
+            const config = { fps: 10, qrbox: { width: 250, height: 250 } };
             html5QrCode = new Html5Qrcode("reader");
-            
-            html5QrCode.start(
-                { facingMode: "environment" }, 
-                { 
-                    fps: 10, 
-                    qrbox: { width: 250, height: 250 }
-                },
-                (decodedText) => handleScan(decodedText),
-                (errorMessage) => {}
-            ).catch(err => {
-                console.error("Kamera-Fehler:", err);
-                if (err.name === "NotAllowedError") {
-                    showMessage("Kamerazugriff verweigert. Bitte erlaube den Zugriff.", "error");
-                } else if (err.name === "NotFoundError") {
-                    showMessage("Keine Kamera gefunden.", "error");
-                } else {
-                    showMessage("Kamera konnte nicht gestartet werden.", "error");
-                }
-                document.getElementById("scannerMode").style.display = "none";
-            });
+            html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanError);
         }
 
-        function handleScan(decodedText) {
+        function onScanSuccess(decodedText) {
             const ticket = eventData.tickets.find(t => t.id === decodedText);
-            const resultBox = document.getElementById("scanResult");
+            const resultElement = document.getElementById('scanResult');
             
+            // Stoppt den Scanner kurz, um das Ergebnis zu verarbeiten
+            html5QrCode.stop();
+
             if (ticket) {
-                if (!ticket.checkedIn) {
-                    ticket.checkedIn = true;
-                    resultBox.innerHTML = `<strong>${ticket.name}</strong><br><span style='color:lime'>✔️ Eingecheckt</span>`;
-                    showMessage(`${ticket.name} erfolgreich eingecheckt!`, "success");
-                    saveEventToLocalStorage();
+                if (ticket.checkedIn) {
+                    resultElement.textContent = `Ticket für ${ticket.name} wurde bereits gescannt.`;
+                    resultElement.classList.add('error');
+                    resultElement.classList.remove('success');
+                    errorSound.play();
                 } else {
-                    resultBox.innerHTML = `<strong>${ticket.name}</strong><br><span style='color:orange'>⚠️ Bereits eingecheckt</span>`;
-                    showMessage(`${ticket.name} ist bereits eingecheckt.`, "warning");
+                    ticket.checkedIn = true;
+                    saveEventToLocalStorage();
+                    resultElement.textContent = `Ticket gültig für: ${ticket.name}!`;
+                    resultElement.classList.add('success');
+                    resultElement.classList.remove('error');
+                    successSound.play();
                 }
             } else {
-                resultBox.innerHTML = `<span style='color:red'>❌ Unbekanntes Ticket</span>`;
-                showMessage("Unbekanntes Ticket!", "error");
+                resultElement.textContent = 'Ungültiges Ticket!';
+                resultElement.classList.add('error');
+                resultElement.classList.remove('success');
+                errorSound.play();
             }
             
-            resultBox.style.display = "block";
-            setTimeout(() => resultBox.style.display = "none", 4000);
-            renderTickets();
+            resultElement.style.display = 'block';
+
+            // Startet den Scanner nach 3 Sekunden neu
+            setTimeout(() => {
+                resultElement.style.display = 'none';
+                html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 250 } }, onScanSuccess, onScanError);
+            }, 3000);
+        }
+
+        function onScanError(errorMessage) {
+            // console.warn(`QR Code scanning error: ${errorMessage}`);
         }
 
         function showExitPinInput() {
-            const exitPinInput = document.getElementById("exitPinInput");
-            const exitButton = document.querySelector("#scannerMode button");
-
-            exitPinInput.style.display = "block";
-            exitPinInput.focus();
-            exitButton.textContent = "Bestätigen & Beenden";
-            exitButton.onclick = exitScanMode;
+            document.getElementById('exitPinInput').style.display = 'block';
+            document.querySelector('#scannerMode button').onclick = exitScanner;
         }
 
-        function exitScanMode() {
-            const enteredPin = document.getElementById("exitPinInput").value;
-
-            if (enteredPin === eventData.pin && eventData.pin !== '') {
-                if (html5QrCode) {
-                    html5QrCode.stop().then(() => {
-                        document.getElementById("scannerMode").style.display = "none";
-                        document.getElementById("exitPinInput").value = '';
-                        document.getElementById("exitPinInput").style.display = "none";
-                        document.querySelector("#scannerMode button").textContent = "Scan-Modus beenden";
-                        document.querySelector("#scannerMode button").onclick = showExitPinInput;
-                        showMessage("Scan-Modus beendet.", "success");
-                    }).catch(err => {
-                        showMessage("Fehler beim Beenden der Kamera.", "error");
-                    });
-                }
+        function exitScanner() {
+            const enteredPin = document.getElementById('exitPinInput').value;
+            if (enteredPin === eventData.pin) {
+                html5QrCode.stop().then(() => {
+                    document.getElementById('scannerMode').style.display = 'none';
+                    document.getElementById('exitPinInput').style.display = 'none';
+                    document.getElementById('scanResult').style.display = 'none';
+                    showMessage("Scan-Modus beendet.", "success");
+                    document.querySelector('#scannerMode button').onclick = showExitPinInput;
+                }).catch(err => {
+                    console.error("Fehler beim Stoppen des Scanners:", err);
+                });
             } else {
-                showMessage("Falscher PIN!", "error");
+                alert("Falsche PIN!");
             }
         }
 
         function toggleInstructions() {
-            const instructionsDiv = document.getElementById("instructions");
-            const toggleButton = document.getElementById("instructions-toggle-button");
-
-            if (instructionsDiv.style.display === "none" || instructionsDiv.style.display === "") {
-                instructionsDiv.style.display = "block";
-                toggleButton.textContent = "Anleitung ausblenden";
+            const instructionsDiv = document.getElementById('instructions');
+            const toggleButton = document.getElementById('instructions-toggle-button');
+            if (instructionsDiv.style.display === 'none') {
+                instructionsDiv.style.display = 'block';
+                toggleButton.textContent = 'Anleitung ausblenden';
             } else {
-                instructionsDiv.style.display = "none";
-                toggleButton.textContent = "Anleitung anzeigen";
+                instructionsDiv.style.display = 'none';
+                toggleButton.textContent = 'Anleitung anzeigen';
             }
         }
+
+        // JAVASCRIPT-LOGIK FÜR DEN FEHLER-REPORT-BUTTON
+        var form = document.getElementById("my-form");
+        var openButton = document.getElementById("open-report-button");
+        var modal = document.getElementById("report-modal");
+        var closeButton = document.querySelector(".close-button");
+
+        function openReportModal() {
+            modal.style.display = "flex";
+            openButton.classList.remove("expanded");
+        }
+
+        openButton.onclick = function() {
+            if (openButton.classList.contains("expanded")) {
+                openReportModal();
+            } else {
+                openButton.classList.add("expanded");
+                setTimeout(() => {
+                    openButton.classList.remove("expanded");
+                }, 5000);
+            }
+        };
+
+        closeButton.onclick = function() {
+            modal.style.display = "none";
+            document.getElementById("my-form-status").innerHTML = "";
+            form.reset();
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+                document.getElementById("my-form-status").innerHTML = "";
+                form.reset();
+            }
+        }
+
+        async function handleSubmit(event) {
+            event.preventDefault();
+            var status = document.getElementById("my-form-status");
+            var data = new FormData(event.target);
+            fetch(event.target.action, {
+                method: form.method,
+                body: data,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    status.innerHTML = "Vielen Dank für deinen Fehlerbericht! Wir kümmern uns darum.";
+                    form.reset();
+                    setTimeout(() => {
+                        modal.style.display = "none";
+                        status.innerHTML = "";
+                    }, 3000);
+                } else {
+                    response.json().then(data => {
+                        if (Object.hasOwn(data, 'errors')) {
+                            status.innerHTML = data["errors"].map(error => error["message"]).join(", ");
+                        } else {
+                            status.innerHTML = "Hoppla! Es gab ein Problem beim Senden des Formulars.";
+                        }
+                    })
+                }
+            }).catch(error => {
+                status.innerHTML = "Hoppla! Es gab ein Problem beim Senden des Formulars.";
+            });
+        }
+        form.addEventListener("submit", handleSubmit);
     </script>
 </body>
-</html>v
+</html>
