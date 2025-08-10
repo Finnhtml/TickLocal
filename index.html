@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TickLocal - Ticketing</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05);
+            max-width: 900px;
+            width: 100%;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+            border-radius: 24px 24px 0 0;
+        }
+
+        h1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            font-size: 3.2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        h2 {
+            color: #2d3748;
+            margin-top: 2.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 0.8rem;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        p {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            color: #4a5568;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        p strong {
+            color: #2d3748;
+            font-weight: 600;
+        }
+
+        label {
+            display: block;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #2d3748;
+            font-weight: 500;
+            font-size: 0.95rem;
+            letter-spacing: 0.01em;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="password"],
+        input[type="file"],
+        select {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1.5rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            color: #2d3748;
+            background: #ffffff;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            outline: none;
+            transform: translateY(-1px);
+        }
+
+        input::placeholder {
+            color: #a0aec0;
+        }
+
+        button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 2rem;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 14px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        button:active {
+            transform: translateY(-1px);
+        }
+
+        .primary-button {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            box-shadow: 0 4px 14px rgba(72, 187, 120, 0.3);
+        }
+        
+        .primary-button:hover {
+            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.4);
+        }
+
+        #ticketList {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            position: relative;
+        }
+
+        #ticketList::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+        }
+
+        #ticketList {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .ticket-item {
+            background: linear-gradient(135deg, #fff 0%, #f8fafc 100%);
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ticket-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .ticket-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+            border-color: #667eea;
+        }
+
+        .ticket-item strong {
+            font-size: 1.3rem;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .ticket-item img {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            width: 140px;
+            height: 140px;
+            transition: all 0.3s ease;
+        }
+
+        .ticket-item:hover img {
+            border-color: #667eea;
+            transform: scale(1.02);
+        }
+
+        #scannerMode {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.9) 0%, rgba(45, 55, 72, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        #reader {
+            width: 350px;
+            height: 350px;
+            background: #000;
+            border: 3px solid #667eea;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 0 40px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #reader::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #667eea);
+            border-radius: 22px;
+            z-index: -1;
+            animation: borderGlow 3s linear infinite;
+        }
+
+        @keyframes borderGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #scanResult {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            color: white;
+            padding: 2rem;
+            border-radius: 16px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            min-width: 320px;
+            display: none;
+            margin-bottom: 1.5rem;
+            animation: scanResultFadeIn 0.5s ease-out;
+        }
+
+        @keyframes scanResultFadeIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        #scannerMode input {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            margin-top: 1.5rem;
+            text-align: center;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            padding: 1rem 1.5rem;
+        }
+
+        #scannerMode input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        #scannerMode input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+            outline: none;
+        }
+
+        #scannerMode button {
+            background: linear-gradient(135deg, #fd7f6f 0%, #e74c3c 100%);
+            margin-top: 1.5rem;
+            width: auto;
+            box-shadow: 0 4px 14px rgba(231, 76, 60, 0.3);
+        }
+
+        #scannerMode button:hover {
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+        }
+
+        #instructions {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 1px solid #cbd5e0;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #instructions::before {
+            content: '💡';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            opacity: 0.6;
+        }
+
+        #instructions ol {
+            list-style: none;
+            counter-reset: step-counter;
+            margin-left: 0;
+            padding-left: 0;
+        }
+
+        #instructions li {
+            counter-increment: step-counter;
+            margin-bottom: 1rem;
+            color: #4a5568;
+            font-size: 1rem;
+            padding-left: 3rem;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        #instructions li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        #instructions h3 {
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        #instructions-toggle-button {
+            display: block;
+            width: 100%;
+            text-align: center;
+            margin-top: 2rem;
+            background: linear-gradient(135deg, #718096 0%, #4a5568 100%);
+            box-shadow: 0 4px 14px rgba(113, 128, 150, 0.3);
+        }
+
+        #instructions-toggle-button:hover {
+            box-shadow: 0 8px 25px rgba(113, 128, 150, 0.4);
+        }
+
+        .step-content {
+            display: none;
+            padding-top: 2rem;
+            animation: stepFadeIn 0.5s ease-out;
+        }
+
+        @keyframes stepFadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #progressbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 3rem;
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        #progressbar::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #e2e8f0 0%, #cbd5e0 50%, #e2e8f0 100%);
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            z-index: 1;
+            border-radius: 2px;
+        }
+
+        #progressbar::after {
+            content: '';
+            position: absolute;
+            width: var(--progress-width, 0%);
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            z-index: 2;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 2px;
+        }
+
+        .step-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 3;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%);
+            color: #718096;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+            font-size: 1.2rem;
+            border: 3px solid #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .step-circle.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .step-circle.completed {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
+        }
+
+        .step-circle.completed::before {
+            content: '✓';
+            font-weight: bold;
+        }
+
+        .step-title {
+            margin-top: 0.8rem;
+            color: #718096;
+            font-size: 0.9rem;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .step-circle.active + .step-title,
+        .step-circle.completed + .step-title {
+            color: #2d3748;
+            font-weight: 600;
+            transform: translateY(-2px);
+        }
+
+        .navigation-buttons {
+            margin-top: 3rem;
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .navigation-buttons button {
+            flex-grow: 1;
+            margin: 0;
+            min-width: 120px;
+        }
+
+        .navigation-buttons button.prev {
+            background: linear-gradient(135deg, #718096 0%, #4a5568 100%);
+            box-shadow: 0 4px 14px rgba(113, 128, 150, 0.3);
+        }
+
+        .navigation-buttons button.prev:hover {
+            box-shadow: 0 8px 25px rgba(113, 128, 150, 0.4);
+        }
+
+        .navigation-buttons button.next {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            box-shadow: 0 4px 14px rgba(72, 187, 120, 0.3);
+        }
+
+        .navigation-buttons button.next:hover {
+            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.4);
+        }
+
+        #messageBox {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.3);
+            z-index: 10000;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            min-width: 320px;
+            text-align: center;
+            pointer-events: none;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #messageBox.show {
+            opacity: 1;
+            top: 30px;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        #messageBox.error {
+            background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+            box-shadow: 0 8px 25px rgba(229, 62, 62, 0.3);
+        }
+
+        #messageBox.warning {
+            background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+            box-shadow: 0 8px 25px rgba(237, 137, 54, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            .container {
+                padding: 2rem;
+                border-radius: 16px;
+                margin: 1rem 0;
+            }
+            h1 {
+                font-size: 2.5rem;
+            }
+            h2 {
+                font-size: 1.5rem;
+            }
+            p {
+                font-size: 1rem;
+            }
+            button {
+                padding: 0.8rem 1.5rem;
+                font-size: 0.95rem;
+            }
+            #reader {
+                width: 280px;
+                height: 280px;
+            }
+            #scanResult {
+                font-size: 1.2rem;
+                padding: 1.5rem;
+                min-width: 280px;
+            }
+            #ticketList {
+                grid-template-columns: 1fr;
+            }
+            .step-circle {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+            #messageBox {
+                width: 90%;
+                left: 5%;
+                transform: translateX(0);
+                min-width: auto;
+            }
+            #messageBox.show {
+                transform: translateX(0) translateY(0);
+            }
+            #progressbar {
+                padding: 1.5rem 0;
+                margin-bottom: 2rem;
+            }
+        }
+
+        /* Floating action animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        .ticket-item:hover {
+            animation: float 2s ease-in-out infinite;
+        }
+
+        /* Subtle pulse for active elements */
+        .step-circle.active {
+            animation: pulse 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3); }
+            100% { box-shadow: 0 8px 35px rgba(102, 126, 234, 0.5); }
+        }
+    </style>
+</head>
+<body>
+    <div id="messageBox"></div>
+
+    <div class="container">
+        <h1>TickLocal</h1>
+        <p><strong>100 % offline, 100 % kostenlos.</strong><br>Deine Daten gehören dir. Keine Cloud, kein Tracking, kein Backendserver.</p>
+
+        <button id="instructions-toggle-button" onclick="toggleInstructions()">Anleitung anzeigen</button>
+        <div id="instructions" style="display: none;">
+            <h3>So funktioniert TickLocal:</h3>
+            <ol>
+                <li>Gib einen Eventnamen, das Datum und eine PIN für den Scan-Modus ein und klicke auf "Event erstellen".</li>
+                <li>Füge nacheinander die Namen der Gäste hinzu und klicke auf "Ticket hinzufügen". Für jeden Gast wird ein QR-Code generiert.</li>
+                <li>Du kannst die Tickets mit dem "Ticket teilen"-Button an die jeweiligen Personen senden.</li>
+                <li>Um die Ticket-Daten zu speichern, klicke auf "Event & Tickets herunterladen".</li>
+                <li>Um ein gespeichertes Event zu laden, klicke auf "Event & Tickets hochladen".</li>
+                <li>Klicke auf "Scan-Modus starten", um Tickets beim Einlass zu überprüfen.</li>
+                <li>Scanne die QR-Codes der Tickets. Die App zeigt an, ob das Ticket gültig ist.</li>
+                <li>Um den Scan-Modus zu beenden, gib deine PIN ein.</li>
+            </ol>
+        </div>
+
+        <div id="progressbar">
+            <div class="step-item">
+                <div class="step-circle" id="circle1">1</div>
+                <div class="step-title">Event erstellen</div>
+            </div>
+            <div class="step-item">
+                <div class="step-circle" id="circle2">2</div>
+                <div class="step-title">Tickets</div>
+            </div>
+            <div class="step-item">
+                <div class="step-circle" id="circle3">3</div>
+                <div class="step-title">Speichern / Laden</div>
+            </div>
+            <div class="step-item">
+                <div class="step-circle" id="circle4">4</div>
+                <div class="step-title">Scanner</div>
+            </div>
+        </div>
+
+        <div id="step1" class="step-content">
+            <h2>Event-Details erstellen</h2>
+            <label for="eventName">Eventname:</label>
+            <input id="eventName" type="text" placeholder="Z.B. Sommerfest 2025">
+
+            <label for="eventDate">Datum des Events:</label>
+            <input id="eventDate" type="date">
+
+            <label for="eventPin">PIN für Scan-Modus:</label>
+            <input id="eventPin" type="password" placeholder="Mindestens 4 Ziffern">
+            
+            <div class="navigation-buttons">
+                <button onclick="nextStep()" class="next">Event erstellen & Weiter</button>
+            </div>
+        </div>
+
+        <div id="step2" class="step-content">
+            <h2>Tickets hinzufügen</h2>
+            <p>Aktuelles Event: <strong id="currentEventName"></strong></p>
+            <label for="ticketName">Name des Gastes:</label>
+            <input id="ticketName" type="text" placeholder="Z.B. Max Mustermann">
+            <button onclick="addTicket()">Ticket hinzufügen</button>
+            <div id="ticketList"></div>
+            <div class="navigation-buttons">
+                <button onclick="prevStep()" class="prev">Zurück</button>
+                <button onclick="nextStep()" class="next">Weiter zu Speichern/Laden</button>
+            </div>
+        </div>
+
+        <div id="step3" class="step-content">
+            <h2>Event speichern oder laden</h2>
+            <p>Hier kannst du dein Event inklusive aller Tickets speichern oder ein vorhandenes Event laden.</p>
+            <button onclick="downloadEvent()">Event & Tickets herunterladen</button>
+            <label for="uploadEventFile">Event & Tickets hochladen (JSON):</label>
+            <input type="file" id="uploadEventFile" accept="application/json" onchange="uploadEvent(event)">
+            <div class="navigation-buttons">
+                <button onclick="prevStep()" class="prev">Zurück</button>
+                <button onclick="nextStep()" class="next">Weiter zum Scanner</button>
+            </div>
+        </div>
+
+        <div id="step4" class="step-content">
+            <h2>Scan-Modus starten</h2>
+            <p>Starte den Scan-Modus, um Tickets zu überprüfen. Halte dein Gerät bereit!</p>
+            <button onclick="startScanner()">Scan-Modus starten</button>
+            <div class="navigation-buttons">
+                <button onclick="prevStep()" class="prev">Zurück</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="scannerMode">
+        <div id="reader"></div>
+        <div id="scanResult"></div>
+        <input id="exitPinInput" type="password" placeholder="PIN zum Beenden" style="display: none;">
+        <button onclick="showExitPinInput()">Scan-Modus beenden</button>
+    </div>
+
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script>
+        let eventData = { name: '', date: '', pin: '', tickets: [] };
+        let html5QrCode;
+        let currentStep = 1;
+
+        // Initialisierung beim Laden der Seite
+        document.addEventListener('DOMContentLoaded', () => {
+            showStep(currentStep);
+            const storedEvent = localStorage.getItem('tickLocalEventData');
+            if (storedEvent) {
+                try {
+                    eventData = JSON.parse(storedEvent);
+                    document.getElementById("eventName").value = eventData.name || '';
+                    document.getElementById("eventDate").value = eventData.date || '';
+                    document.getElementById("eventPin").value = eventData.pin || '';
+                    renderTickets();
+                    showMessage("Vorhandenes Event geladen: " + eventData.name, "success");
+                } catch (e) {
+                    console.error("Fehler beim Laden:", e);
+                    showMessage("Fehler beim Laden alter Event-Daten.", "error");
+                }
+            }
+        });
+
+        function showMessage(message, type = 'success') {
+            const messageBox = document.getElementById('messageBox');
+            messageBox.textContent = message;
+            messageBox.className = type + ' show';
+            setTimeout(() => {
+                messageBox.classList.remove('show');
+            }, 3000);
+        }
+
+        function showStep(stepNum) {
+            document.querySelectorAll('.step-content').forEach(step => {
+                step.style.display = 'none';
+            });
+            document.getElementById(`step${stepNum}`).style.display = 'block';
+            currentStep = stepNum;
+            updateProgressBar();
+
+            if (stepNum === 2 && eventData.name) {
+                document.getElementById('currentEventName').textContent = eventData.name;
+            }
+        }
+
+        function updateProgressBar() {
+            document.querySelectorAll('.step-circle').forEach((circle, index) => {
+                const stepNumber = index + 1;
+                circle.classList.remove('active', 'completed');
+
+                if (stepNumber < currentStep) {
+                    circle.classList.add('completed');
+                } else if (stepNumber === currentStep) {
+                    circle.classList.add('active');
+                }
+            });
+        }
+
+        function nextStep() {
+            if (currentStep === 1) {
+                const eventName = document.getElementById("eventName").value;
+                const eventDate = document.getElementById("eventDate").value;
+                const eventPin = document.getElementById("eventPin").value;
+
+                if (!eventName || !eventDate || !eventPin) {
+                    showMessage("Bitte fülle alle Felder für das Event aus!", "warning");
+                    return;
+                }
+                eventData.name = eventName;
+                eventData.date = eventDate;
+                eventData.pin = eventPin;
+                if (eventData.tickets.length === 0) {
+                    eventData.tickets = [];
+                }
+                saveEventToLocalStorage();
+                showMessage("Event erfolgreich erstellt!", "success");
+                renderTickets();
+            }
+
+            if (currentStep < 4) {
+                showStep(currentStep + 1);
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                showStep(currentStep - 1);
+            }
+        }
+
+        function addTicket() {
+            const name = document.getElementById("ticketName").value;
+            if (!name) {
+                showMessage("Bitte gib einen Namen für das Ticket ein.", "warning");
+                return;
+            }
+            const id = generateId();
+            eventData.tickets.push({ id, name, checkedIn: false });
+            document.getElementById("ticketName").value = '';
+            renderTickets();
+            saveEventToLocalStorage();
+            showMessage("Ticket hinzugefügt!", "success");
+        }
+
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        function renderTickets() {
+            const list = document.getElementById("ticketList");
+            list.innerHTML = eventData.tickets.map(t => `
+                <div class="ticket-item">
+                    <strong>${t.name}</strong>
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(t.id)}">
+                    <button onclick="shareTicket('${t.id}', '${t.name}')">Ticket teilen</button>
+                </div>
+            `).join('');
+        }
+
+        async function shareTicket(ticketId, ticketName) {
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: `Dein Ticket für ${eventData.name}`,
+                        text: `Hallo ${ticketName}! Hier ist dein Ticket für ${eventData.name}. Deine Ticket-ID ist: ${ticketId}.`,
+                    });
+                } catch (error) {
+                    showMessage('Fehler beim Teilen des Tickets.', 'warning');
+                }
+            } else {
+                navigator.clipboard.writeText(ticketId).then(() => {
+                    showMessage("Ticket-ID in Zwischenablage kopiert!", "success");
+                }).catch(() => {
+                    showMessage("Teilen nicht unterstützt.", "warning");
+                });
+            }
+        }
+
+        function downloadEvent() {
+            if (!eventData.name) {
+                showMessage("Bitte erstelle zuerst ein Event.", "warning");
+                return;
+            }
+            const blob = new Blob([JSON.stringify(eventData)], { type: "application/json" });
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = `${eventData.name.replace(/\s+/g, '_')}_event.json`;
+            a.click();
+            URL.revokeObjectURL(a.href);
+            showMessage("Event heruntergeladen!", "success");
+        }
+
+        function uploadEvent(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                try {
+                    const data = JSON.parse(evt.target.result);
+                    if (data && data.name && data.pin && Array.isArray(data.tickets)) {
+                        eventData = data;
+                        document.getElementById("eventName").value = eventData.name || '';
+                        document.getElementById("eventDate").value = eventData.date || '';
+                        document.getElementById("eventPin").value = eventData.pin || '';
+                        renderTickets();
+                        saveEventToLocalStorage();
+                        showMessage("Event geladen: " + eventData.name, "success");
+                    } else {
+                        showMessage("Ungültiges Event-Format.", "error");
+                    }
+                } catch (err) {
+                    showMessage("Fehler beim Laden der Datei.", "error");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function saveEventToLocalStorage() {
+            try {
+                localStorage.setItem('tickLocalEventData', JSON.stringify(eventData));
+            } catch (e) {
+                showMessage("Speichern fehlgeschlagen.", "error");
+            }
+        }
+
+        function startScanner() {
+            if (!eventData.name || !eventData.pin) {
+                showMessage("Bitte erstelle zuerst ein Event mit PIN.", "warning");
+                return;
+            }
+
+            document.getElementById("scannerMode").style.display = "flex";
+            document.getElementById("exitPinInput").style.display = "none";
+
+            if (html5QrCode) {
+                html5QrCode.stop().catch(err => console.warn("Scanner stoppen:", err));
+            }
+
+            html5QrCode = new Html5Qrcode("reader");
+            
+            html5QrCode.start(
+                { facingMode: "environment" }, 
+                { 
+                    fps: 10, 
+                    qrbox: { width: 250, height: 250 }
+                },
+                (decodedText) => handleScan(decodedText),
+                (errorMessage) => {}
+            ).catch(err => {
+                console.error("Kamera-Fehler:", err);
+                if (err.name === "NotAllowedError") {
+                    showMessage("Kamerazugriff verweigert. Bitte erlaube den Zugriff.", "error");
+                } else if (err.name === "NotFoundError") {
+                    showMessage("Keine Kamera gefunden.", "error");
+                } else {
+                    showMessage("Kamera konnte nicht gestartet werden.", "error");
+                }
+                document.getElementById("scannerMode").style.display = "none";
+            });
+        }
+
+        function handleScan(decodedText) {
+            const ticket = eventData.tickets.find(t => t.id === decodedText);
+            const resultBox = document.getElementById("scanResult");
+            
+            if (ticket) {
+                if (!ticket.checkedIn) {
+                    ticket.checkedIn = true;
+                    resultBox.innerHTML = `<strong>${ticket.name}</strong><br><span style='color:lime'>✔️ Eingecheckt</span>`;
+                    showMessage(`${ticket.name} erfolgreich eingecheckt!`, "success");
+                    saveEventToLocalStorage();
+                } else {
+                    resultBox.innerHTML = `<strong>${ticket.name}</strong><br><span style='color:orange'>⚠️ Bereits eingecheckt</span>`;
+                    showMessage(`${ticket.name} ist bereits eingecheckt.`, "warning");
+                }
+            } else {
+                resultBox.innerHTML = `<span style='color:red'>❌ Unbekanntes Ticket</span>`;
+                showMessage("Unbekanntes Ticket!", "error");
+            }
+            
+            resultBox.style.display = "block";
+            setTimeout(() => resultBox.style.display = "none", 4000);
+            renderTickets();
+        }
+
+        function showExitPinInput() {
+            const exitPinInput = document.getElementById("exitPinInput");
+            const exitButton = document.querySelector("#scannerMode button");
+
+            exitPinInput.style.display = "block";
+            exitPinInput.focus();
+            exitButton.textContent = "Bestätigen & Beenden";
+            exitButton.onclick = exitScanMode;
+        }
+
+        function exitScanMode() {
+            const enteredPin = document.getElementById("exitPinInput").value;
+
+            if (enteredPin === eventData.pin && eventData.pin !== '') {
+                if (html5QrCode) {
+                    html5QrCode.stop().then(() => {
+                        document.getElementById("scannerMode").style.display = "none";
+                        document.getElementById("exitPinInput").value = '';
+                        document.getElementById("exitPinInput").style.display = "none";
+                        document.querySelector("#scannerMode button").textContent = "Scan-Modus beenden";
+                        document.querySelector("#scannerMode button").onclick = showExitPinInput;
+                        showMessage("Scan-Modus beendet.", "success");
+                    }).catch(err => {
+                        showMessage("Fehler beim Beenden der Kamera.", "error");
+                    });
+                }
+            } else {
+                showMessage("Falscher PIN!", "error");
+            }
+        }
+
+        function toggleInstructions() {
+            const instructionsDiv = document.getElementById("instructions");
+            const toggleButton = document.getElementById("instructions-toggle-button");
+
+            if (instructionsDiv.style.display === "none" || instructionsDiv.style.display === "") {
+                instructionsDiv.style.display = "block";
+                toggleButton.textContent = "Anleitung ausblenden";
+            } else {
+                instructionsDiv.style.display = "none";
+                toggleButton.textContent = "Anleitung anzeigen";
+            }
+        }
+    </script>
+</body>
+</html>v
