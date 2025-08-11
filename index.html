@@ -3,225 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TickLocal - Ticketing</title>
+    <title>TickLocal</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --success-color: #48bb78;
+            --error-color: #e53e3e;
+            --warning-color: #ed8936;
+            --bg-color: #f8fafc;
+            --container-bg: #ffffff;
+            --text-color: #2d3748;
+            --light-text-color: #718096;
+            --border-color: #e2e8f0;
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.1);
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--bg-color) 0%, #f0f4f8 100%);
+            color: var(--text-color);
             line-height: 1.6;
-            color: #1a1a1a;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 1rem;
+            margin: 0;
+            padding: 2rem;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 3rem;
-            border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05);
-            max-width: 900px;
             width: 100%;
-            margin: 2rem 0;
-            position: relative;
-            overflow: hidden;
+            max-width: 800px;
+            background-color: var(--container-bg);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
         }
 
-        .container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
-            border-radius: 24px 24px 0 0;
+        h1, h2 {
+            font-weight: 600;
+            color: var(--text-color);
         }
 
         h1 {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-size: 3rem;
             text-align: center;
             margin-bottom: 0.5rem;
-            font-size: 3.2rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
+            letter-spacing: -1px;
         }
 
         h2 {
-            color: #2d3748;
-            margin-top: 2.5rem;
-            margin-bottom: 1.5rem;
             font-size: 1.8rem;
-            font-weight: 600;
-            position: relative;
-            padding-bottom: 0.8rem;
-        }
-
-        h2::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 60px;
-            height: 3px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            border-radius: 2px;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            text-align: center;
         }
 
         p {
             text-align: center;
-            margin-bottom: 2.5rem;
-            color: #4a5568;
+            margin-bottom: 2rem;
+            color: var(--light-text-color);
             font-size: 1.1rem;
-            line-height: 1.7;
         }
 
-        p strong {
-            color: #2d3748;
-            font-weight: 600;
-        }
-
-        label {
-            display: block;
-            margin-top: 1.5rem;
-            margin-bottom: 0.5rem;
-            color: #2d3748;
-            font-weight: 500;
-            font-size: 0.95rem;
-            letter-spacing: 0.01em;
-        }
-
-        input[type="text"],
-        input[type="date"],
-        input[type="password"],
-        input[type="file"],
-        select {
+        button, input[type="text"], input[type="password"], input[type="date"], textarea, select, input[type="file"] {
             width: 100%;
-            padding: 1rem 1.2rem;
-            margin-bottom: 1.5rem;
-            border: 2px solid #e2e8f0;
+            padding: 1rem;
+            margin-top: 1rem;
             border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
             font-size: 1rem;
-            color: #2d3748;
-            background: #ffffff;
+            color: var(--text-color);
             transition: all 0.3s ease;
+            box-sizing: border-box;
             font-family: inherit;
-        }
-
-        input:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-            outline: none;
-            transform: translateY(-1px);
         }
 
         input::placeholder {
-            color: #a0aec0;
+            color: var(--light-text-color);
         }
 
         button {
-            display: inline-flex;
+            cursor: pointer;
+            color: white;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border: none;
+            box-shadow: 0 4px 14px rgba(102, 126, 234, 0.3);
+            display: flex;
             align-items: center;
             justify-content: center;
-            padding: 1rem 2rem;
-            margin: 0.5rem 0.5rem 0.5rem 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #ffffff;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            font-family: inherit;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 14px rgba(102, 126, 234, 0.3);
-            position: relative;
-            overflow: hidden;
+            gap: 0.5rem;
         }
-
-        button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
-        }
-
+        
         button:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
         }
 
-        button:hover::before {
-            left: 100%;
-        }
-
         button:active {
-            transform: translateY(-1px);
+            transform: translateY(0);
+            box-shadow: 0 4px 14px rgba(102, 126, 234, 0.3);
         }
 
-        .primary-button {
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-            box-shadow: 0 4px 14px rgba(72, 187, 120, 0.3);
-        }
-        
-        .primary-button:hover {
-            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.4);
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
         }
 
-        #ticketList {
-            margin-top: 2rem;
-            padding-top: 2rem;
-            position: relative;
-        }
-
-        #ticketList::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+        label {
+            display: block;
+            margin-top: 1.5rem;
+            font-weight: 500;
+            color: var(--text-color);
         }
 
         #ticketList {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
         }
 
         .ticket-item {
-            background: linear-gradient(135deg, #fff 0%, #f8fafc 100%);
-            border: 1px solid #e2e8f0;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
             border-radius: 16px;
-            padding: 2rem;
+            padding: 1.5rem;
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.2rem;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         .ticket-item::before {
@@ -229,26 +152,30 @@
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
+            width: 100%;
             height: 3px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
         }
 
         .ticket-item:hover {
             transform: translateY(-4px);
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
-            border-color: #667eea;
+            border-color: var(--primary-color);
+        }
+        
+        .ticket-item:hover button {
+            background: var(--primary-color);
         }
 
         .ticket-item strong {
             font-size: 1.3rem;
-            color: #2d3748;
+            color: var(--text-color);
             margin-bottom: 0.5rem;
             font-weight: 600;
         }
 
         .ticket-item img {
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--border-color);
             border-radius: 12px;
             width: 140px;
             height: 140px;
@@ -256,7 +183,7 @@
         }
 
         .ticket-item:hover img {
-            border-color: #667eea;
+            border-color: var(--primary-color);
             transform: scale(1.02);
         }
 
@@ -274,13 +201,14 @@
             justify-content: center;
             align-items: center;
             color: white;
+            padding: 1rem;
         }
 
         #reader {
             width: 350px;
             height: 350px;
             background: #000;
-            border: 3px solid #667eea;
+            border: 3px solid var(--primary-color);
             border-radius: 20px;
             margin-bottom: 2rem;
             box-shadow: 0 0 40px rgba(102, 126, 234, 0.3);
@@ -295,7 +223,7 @@
             left: -2px;
             right: -2px;
             bottom: -2px;
-            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #667eea);
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), #f093fb, var(--primary-color));
             border-radius: 22px;
             z-index: -1;
             animation: borderGlow 3s linear infinite;
@@ -323,16 +251,16 @@
             animation: scanResultFadeIn 0.5s ease-out;
             transition: all 0.3s ease;
         }
-        
+           
         #scanResult.success {
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-            border-color: #48bb78;
+            background: linear-gradient(135deg, var(--success-color) 0%, #38a169 100%);
+            border-color: var(--success-color);
             box-shadow: 0 8px 32px rgba(72, 187, 120, 0.3);
         }
 
         #scanResult.error {
-            background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
-            border-color: #e53e3e;
+            background: linear-gradient(135deg, var(--error-color) 0%, #c53030 100%);
+            border-color: var(--error-color);
             box-shadow: 0 8px 32px rgba(229, 62, 62, 0.3);
         }
 
@@ -358,7 +286,7 @@
         }
 
         #scannerMode input:focus {
-            border-color: #667eea;
+            border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
             outline: none;
         }
@@ -376,7 +304,7 @@
 
         #instructions {
             background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            border: 1px solid #cbd5e0;
+            border: 1px solid var(--border-color);
             border-radius: 16px;
             padding: 2rem;
             margin-top: 2rem;
@@ -416,7 +344,7 @@
             position: absolute;
             left: 0;
             top: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             color: white;
             width: 2rem;
             height: 2rem;
@@ -429,7 +357,7 @@
         }
 
         #instructions h3 {
-            color: #2d3748;
+            color: var(--text-color);
             margin-bottom: 1.5rem;
             font-size: 1.5rem;
             font-weight: 600;
@@ -462,7 +390,7 @@
         #progressbar {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start; /* Änderung für bessere Ausrichtung */
             width: 100%;
             margin-bottom: 3rem;
             position: relative;
@@ -475,7 +403,7 @@
             width: 100%;
             height: 3px;
             background: linear-gradient(90deg, #e2e8f0 0%, #cbd5e0 50%, #e2e8f0 100%);
-            top: 50%;
+            top: calc(50% + 25px); /* Positionierung anpassen */
             left: 0;
             transform: translateY(-50%);
             z-index: 1;
@@ -487,8 +415,8 @@
             position: absolute;
             width: var(--progress-width, 0%);
             height: 3px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            top: 50%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            top: calc(50% + 25px); /* Positionierung anpassen */
             left: 0;
             transform: translateY(-50%);
             z-index: 2;
@@ -510,7 +438,7 @@
             height: 50px;
             border-radius: 50%;
             background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%);
-            color: #718096;
+            color: var(--light-text-color);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -519,17 +447,18 @@
             border: 3px solid #fff;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 1rem; /* Abstand zum Titel hinzufügen */
         }
 
         .step-circle.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             color: white;
             transform: scale(1.1);
             box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
         }
 
         .step-circle.completed {
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            background: linear-gradient(135deg, var(--success-color) 0%, #38a169 100%);
             color: white;
             box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
         }
@@ -541,7 +470,7 @@
 
         .step-title {
             margin-top: 0.8rem;
-            color: #718096;
+            color: var(--light-text-color);
             font-size: 0.9rem;
             text-align: center;
             font-weight: 500;
@@ -550,7 +479,7 @@
 
         .step-circle.active + .step-title,
         .step-circle.completed + .step-title {
-            color: #2d3748;
+            color: var(--text-color);
             font-weight: 600;
             transform: translateY(-2px);
         }
@@ -578,7 +507,7 @@
         }
 
         .navigation-buttons button.next {
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            background: linear-gradient(135deg, var(--success-color) 0%, #38a169 100%);
             box-shadow: 0 4px 14px rgba(72, 187, 120, 0.3);
         }
 
@@ -591,7 +520,7 @@
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            background: linear-gradient(135deg, var(--success-color) 0%, #38a169 100%);
             color: white;
             padding: 1rem 1.5rem;
             border-radius: 12px;
@@ -613,45 +542,49 @@
         }
 
         #messageBox.error {
-            background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+            background: linear-gradient(135deg, var(--error-color) 0%, #c53030 100%);
             box-shadow: 0 8px 25px rgba(229, 62, 62, 0.3);
         }
 
         #messageBox.warning {
-            background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+            background: linear-gradient(135deg, var(--warning-color) 0%, #dd6b20 100%);
             box-shadow: 0 8px 25px rgba(237, 137, 54, 0.3);
         }
 
         @media (max-width: 768px) {
             body {
                 padding: 1rem;
+                align-items: center;
             }
             .container {
-                padding: 2rem;
+                padding: 1.5rem;
                 border-radius: 16px;
                 margin: 1rem 0;
             }
             h1 {
-                font-size: 2.5rem;
+                font-size: 2rem;
             }
             h2 {
                 font-size: 1.5rem;
             }
             p {
-                font-size: 1rem;
-            }
-            button {
-                padding: 0.8rem 1.5rem;
                 font-size: 0.95rem;
             }
+            button, input[type="text"], input[type="password"], input[type="date"], textarea, select {
+                font-size: 0.95rem;
+                padding: 0.8rem;
+            }
             #reader {
-                width: 280px;
-                height: 280px;
+                width: 80vw;
+                height: 80vw;
+                max-width: 300px;
+                max-height: 300px;
             }
             #scanResult {
                 font-size: 1.2rem;
-                padding: 1.5rem;
-                min-width: 280px;
+                padding: 1rem;
+                min-width: auto;
+                width: 90%;
             }
             #ticketList {
                 grid-template-columns: 1fr;
@@ -661,6 +594,9 @@
                 height: 40px;
                 font-size: 1rem;
             }
+            .step-title {
+                font-size: 0.8rem;
+            }
             #messageBox {
                 width: 90%;
                 left: 5%;
@@ -669,188 +605,31 @@
             }
             #messageBox.show {
                 transform: translateX(0) translateY(0);
+                top: 20px;
             }
-            #progressbar {
-                padding: 1.5rem 0;
-                margin-bottom: 2rem;
+            .navigation-buttons {
+                flex-direction: column;
             }
-        }
-
-        /* Floating action animations */
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-        
-        .ticket-item:hover {
-            animation: float 2s ease-in-out infinite;
-        }
-
-        /* Subtle pulse for active elements */
-        .step-circle.active {
-            animation: pulse 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3); }
-            100% { box-shadow: 0 8px 35px rgba(102, 126, 234, 0.5); }
-        }
-
-        /* NEUE CSS-Regeln für den Fehler-Report-Button */
-        #open-report-button {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            z-index: 999;
-            width: 60px; /* Kleinere Startgröße */
-            height: 60px;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #ffffff;
-            border: none;
-            border-radius: 50%; /* Runde Form */
-            cursor: pointer;
-            font-size: 1.2rem;
-            font-weight: 600;
-            font-family: inherit;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            white-space: nowrap;
-            overflow: hidden;
-            text-decoration: none;
-        }
-
-        #open-report-button:hover {
-            box-shadow: 0 8px 35px rgba(102, 126, 234, 0.5);
-            transform: translateY(-4px) scale(1.05);
-        }
-        
-        /* Zustand, wenn der Text eingeblendet wird */
-        #open-report-button.expanded {
-            width: 200px; /* Größere Breite mit Text */
-            border-radius: 30px;
-            padding: 1rem 1.5rem;
-        }
-
-        #open-report-button span {
-            display: none; /* Text standardmäßig versteckt */
-            margin-left: 0.5rem;
-            font-size: 1rem;
-        }
-        
-        /* Zustand, wenn der Text angezeigt wird */
-        #open-report-button.expanded span {
-            display: inline;
-        }
-        
-        /* Stil des Modal-Containers */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 10000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.6);
-            backdrop-filter: blur(5px);
-            justify-content: center;
-            align-items: center;
-            padding: 1rem;
-            overflow-y: auto;
-        }
-
-        /* Inhalt des Modals */
-        .modal-content {
-            background-color: #fefefe;
-            padding: 25px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            width: 90%;
-            max-width: 500px;
-            position: relative;
-            animation: modalFadeIn 0.3s ease-out;
-            border: 1px solid #e2e8f0;
-            margin: auto;
-        }
-        
-        @keyframes modalFadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Schließen-Button */
-        .close-button {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-
-        .close-button:hover,
-        .close-button:focus {
-            color: #000;
-            text-decoration: none;
-        }
-
-        /* Formular-Elemente im Modal */
-        .modal-content form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .modal-content label {
-            margin-top: 15px;
-            margin-bottom: 5px;
-            font-weight: 500;
-        }
-
-        .modal-content input[type="text"], 
-        .modal-content textarea, 
-        .modal-content select {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-family: inherit;
-        }
-
-        .modal-content textarea {
-            resize: vertical;
-        }
-
-        .modal-content button[type="submit"] {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .modal-content button[type="submit"]:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 14px rgba(102, 126, 234, 0.3);
-        }
-
-        /* Anpassung für kleinere Bildschirme */
-        @media (max-width: 768px) {
+            .ticket-item:hover {
+                transform: none; /* Hover-Effekte auf Mobilgeräten deaktivieren */
+                box-shadow: none;
+            }
+            #open-report-button {
+                bottom: 1rem;
+                right: 1rem;
+                width: 50px;
+                height: 50px;
+                font-size: 1rem;
+            }
+            #open-report-button.expanded {
+                width: 180px;
+            }
+            #open-report-button span {
+                font-size: 0.9rem;
+            }
             .modal-content {
-                max-height: 90vh;
-                overflow-y: auto;
+                padding: 20px;
+                width: 95%;
             }
         }
     </style>
@@ -950,34 +729,34 @@
     <button id="open-report-button">🐞<span>Fehler melden</span></button>
 
     <div id="report-modal" class="modal">
-      <div class="modal-content">
-        <span class="close-button">&times;</span>
-        <h2>Fehler melden</h2>
-        <p>Bitte beschreibe das Problem so detailliert wie möglich. Deine Daten werden anonymisiert übermittelt.</p>
-        
-        <form id="my-form" action="https://formspree.io/f/xeozvlbr" method="POST">
-          <label for="error-type">Art des Problems:</label>
-          <select name="Art des Problems" id="error-type" required>
-            <option value="visueller_fehler">Visueller Fehler (Darstellung)</option>
-            <option value="funktionaler_fehler">Funktionaler Fehler (Button, Link funktioniert nicht)</option>
-            <option value="performance_problem">Performance-Problem (Seite ist langsam)</option>
-            <option value="inhaltlicher_fehler">Inhaltlicher Fehler (Tippfehler, falsche Info)</option>
-            <option value="sonstiges">Sonstiges</option>
-          </select>
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Fehler melden</h2>
+            <p>Bitte beschreibe das Problem so detailliert wie möglich. Deine Daten werden anonymisiert übermittelt.</p>
+            
+            <form id="my-form" action="https://formspree.io/f/xeozvlbr" method="POST">
+                <label for="error-type">Art des Problems:</label>
+                <select name="Art des Problems" id="error-type" required>
+                    <option value="visueller_fehler">Visueller Fehler (Darstellung)</option>
+                    <option value="funktionaler_fehler">Funktionaler Fehler (Button, Link funktioniert nicht)</option>
+                    <option value="performance_problem">Performance-Problem (Seite ist langsam)</option>
+                    <option value="inhaltlicher_fehler">Inhaltlicher Fehler (Tippfehler, falsche Info)</option>
+                    <option value="sonstiges">Sonstiges</option>
+                </select>
 
-          <label for="description">Beschreibung des Fehlers:</label>
-          <textarea id="description" name="Beschreibung des Fehlers" placeholder="Bitte beschreibe den Fehler hier so genau wie möglich." rows="5" required></textarea>
+                <label for="description">Beschreibung des Fehlers:</label>
+                <textarea id="description" name="Beschreibung des Fehlers" placeholder="Bitte beschreibe den Fehler hier so genau wie möglich." rows="5" required></textarea>
 
-          <label for="page-url">Seite, auf der das Problem auftrat (optional):</label>
-          <input type="text" id="page-url" name="Seite" placeholder="z.B. https://deine-website.de/seite-xy" />
+                <label for="page-url">Seite, auf der das Problem auftrat (optional):</label>
+                <input type="text" id="page-url" name="Seite" placeholder="z.B. https://deine-website.de/seite-xy" />
 
-          <label for="browser-info">Welchen Browser nutzt du? (optional)</label>
-          <input type="text" id="browser-info" name="Browser" placeholder="z.B. Chrome, Firefox, Safari" />
-          
-          <button id="my-form-button" type="submit">Senden</button>
-          <p id="my-form-status"></p>
-        </form>
-      </div>
+                <label for="browser-info">Welchen Browser nutzt du? (optional)</label>
+                <input type="text" id="browser-info" name="Browser" placeholder="z.B. Chrome, Firefox, Safari" />
+                
+                <button id="my-form-button" type="submit">Senden</button>
+                <p id="my-form-status"></p>
+            </form>
+        </div>
     </div>
 
     <div id="scannerMode">
@@ -998,7 +777,6 @@
         const successSound = document.getElementById('successSound');
         const errorSound = document.getElementById('errorSound');
 
-        // Initialisierung beim Laden der Seite
         document.addEventListener('DOMContentLoaded', () => {
             showStep(currentStep);
             const storedEvent = localStorage.getItem('tickLocalEventData');
@@ -1050,6 +828,9 @@
                     circle.classList.add('active');
                 }
             });
+            const progressbar = document.getElementById('progressbar');
+            const progress = (currentStep - 1) / 3 * 100;
+            progressbar.style.setProperty('--progress-width', `${progress}%`);
         }
 
         function nextStep() {
@@ -1085,7 +866,7 @@
         }
 
         function addTicket() {
-            const name = document.getElementById("ticketName").value;
+            const name = document.getElementById("ticketName").value.trim();
             if (!name) {
                 showMessage("Bitte gib einen Namen für das Ticket ein.", "warning");
                 return;
@@ -1160,151 +941,168 @@
                         document.getElementById("eventPin").value = eventData.pin || '';
                         renderTickets();
                         saveEventToLocalStorage();
-                        showMessage("Event geladen: " + eventData.name, "success");
+                        showMessage(`Event "${eventData.name}" erfolgreich geladen!`, "success");
                     } else {
-                        showMessage("Ungültiges Event-Format.", "error");
+                        showMessage("Ungültiges JSON-Format. Bitte lade eine gültige Event-Datei hoch.", "error");
                     }
-                } catch (err) {
-                    showMessage("Fehler beim Laden der Datei.", "error");
+                } catch (error) {
+                    showMessage("Fehler beim Parsen der Datei. Überprüfe das Format.", "error");
                 }
             };
             reader.readAsText(file);
+            e.target.value = null; // Dateiauswahl zurücksetzen
         }
 
         function saveEventToLocalStorage() {
-            try {
-                localStorage.setItem('tickLocalEventData', JSON.stringify(eventData));
-            } catch (e) {
-                showMessage("Fehler beim Speichern der Daten. Der Browser-Speicher ist möglicherweise voll.", "error");
-            }
+            localStorage.setItem('tickLocalEventData', JSON.stringify(eventData));
         }
 
         function startScanner() {
-            if (!eventData.pin) {
-                showMessage("Bitte erstelle zuerst ein Event und setze eine PIN.", "warning");
+            if (!eventData.name) {
+                showMessage("Bitte erstelle oder lade zuerst ein Event.", "warning");
                 return;
             }
             document.getElementById('scannerMode').style.display = 'flex';
+            document.body.classList.add('scanner-active');
 
-            const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+            const config = {
+                fps: 10,
+                qrbox: { width: 250, height: 250 }
+            };
+
             html5QrCode = new Html5Qrcode("reader");
             html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanError);
         }
 
-        function onScanSuccess(decodedText) {
+        function onScanSuccess(decodedText, decodedResult) {
             const ticket = eventData.tickets.find(t => t.id === decodedText);
-            const resultElement = document.getElementById('scanResult');
-            
-            // Stoppt den Scanner kurz, um das Ergebnis zu verarbeiten
-            html5QrCode.stop();
+            const scanResultDiv = document.getElementById('scanResult');
+            scanResultDiv.style.display = 'block';
 
             if (ticket) {
-                if (ticket.checkedIn) {
-                    resultElement.textContent = `Ticket für ${ticket.name} wurde bereits gescannt.`;
-                    resultElement.classList.add('error');
-                    resultElement.classList.remove('success');
-                    errorSound.play();
-                } else {
+                if (!ticket.checkedIn) {
                     ticket.checkedIn = true;
                     saveEventToLocalStorage();
-                    resultElement.textContent = `Ticket gültig für: ${ticket.name}!`;
-                    resultElement.classList.add('success');
-                    resultElement.classList.remove('error');
-                    successSound.play();
+                    scanResultDiv.textContent = `Ticket gültig! Willkommen, ${ticket.name}!`;
+                    scanResultDiv.className = 'success';
+                    playFeedback('success');
+                } else {
+                    scanResultDiv.textContent = `Ticket bereits eingelöst von ${ticket.name}.`;
+                    scanResultDiv.className = 'warning';
+                    playFeedback('warning');
                 }
             } else {
-                resultElement.textContent = 'Ungültiges Ticket!';
-                resultElement.classList.add('error');
-                resultElement.classList.remove('success');
-                errorSound.play();
+                scanResultDiv.textContent = "Ungültiges Ticket!";
+                scanResultDiv.className = 'error';
+                playFeedback('error');
             }
-            
-            resultElement.style.display = 'block';
 
-            // Startet den Scanner nach 3 Sekunden neu
+            // Scanner nach erfolgreichem Scan kurz stoppen und dann fortsetzen
+            html5QrCode.pause();
             setTimeout(() => {
-                resultElement.style.display = 'none';
-                html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 250 } }, onScanSuccess, onScanError);
+                html5QrCode.resume();
+                scanResultDiv.style.display = 'none';
             }, 3000);
         }
 
         function onScanError(errorMessage) {
-            // console.warn(`QR Code scanning error: ${errorMessage}`);
+            // console.error("QR Code Error:", errorMessage);
         }
-
+        
         function showExitPinInput() {
-            document.getElementById('exitPinInput').style.display = 'block';
-            document.querySelector('#scannerMode button').onclick = exitScanner;
-        }
-
-        function exitScanner() {
-            const enteredPin = document.getElementById('exitPinInput').value;
-            if (enteredPin === eventData.pin) {
-                html5QrCode.stop().then(() => {
-                    document.getElementById('scannerMode').style.display = 'none';
-                    document.getElementById('exitPinInput').style.display = 'none';
-                    document.getElementById('scanResult').style.display = 'none';
-                    showMessage("Scan-Modus beendet.", "success");
-                    document.querySelector('#scannerMode button').onclick = showExitPinInput;
-                }).catch(err => {
-                    console.error("Fehler beim Stoppen des Scanners:", err);
-                });
+            const exitPinInput = document.getElementById('exitPinInput');
+            const scannerModeButton = document.querySelector('#scannerMode button');
+            
+            if (exitPinInput.style.display === 'none') {
+                exitPinInput.style.display = 'block';
+                scannerModeButton.textContent = 'Bestätigen';
+                exitPinInput.focus();
+                
+                scannerModeButton.onclick = () => {
+                    if (exitPinInput.value === eventData.pin) {
+                        stopScanner();
+                    } else {
+                        showMessage("Falsche PIN.", "error");
+                        exitPinInput.value = '';
+                    }
+                };
             } else {
-                alert("Falsche PIN!");
+                if (exitPinInput.value === eventData.pin) {
+                    stopScanner();
+                } else {
+                    showMessage("Falsche PIN.", "error");
+                    exitPinInput.value = '';
+                }
             }
         }
 
+        function stopScanner() {
+            html5QrCode.stop().then(() => {
+                document.getElementById('scannerMode').style.display = 'none';
+                document.body.classList.remove('scanner-active');
+                document.getElementById('exitPinInput').style.display = 'none';
+                document.getElementById('exitPinInput').value = '';
+                document.getElementById('scanResult').style.display = 'none';
+                const scannerModeButton = document.querySelector('#scannerMode button');
+                scannerModeButton.textContent = 'Scan-Modus beenden';
+                scannerModeButton.onclick = showExitPinInput;
+            }).catch(err => {
+                console.error("Fehler beim Stoppen des Scanners:", err);
+            });
+        }
+        
+        function playFeedback(type) {
+            if (type === 'success') {
+                successSound.play();
+                if (navigator.vibrate) {
+                    navigator.vibrate(200);
+                }
+            } else if (type === 'error') {
+                errorSound.play();
+                if (navigator.vibrate) {
+                    navigator.vibrate([100, 50, 100]);
+                }
+            } else if (type === 'warning') {
+                 if (navigator.vibrate) {
+                    navigator.vibrate([50, 30, 50]);
+                }
+            }
+        }
+        
         function toggleInstructions() {
-            const instructionsDiv = document.getElementById('instructions');
-            const toggleButton = document.getElementById('instructions-toggle-button');
-            if (instructionsDiv.style.display === 'none') {
-                instructionsDiv.style.display = 'block';
-                toggleButton.textContent = 'Anleitung ausblenden';
+            const instructions = document.getElementById('instructions');
+            const button = document.getElementById('instructions-toggle-button');
+            if (instructions.style.display === 'none') {
+                instructions.style.display = 'block';
+                button.textContent = 'Anleitung ausblenden';
             } else {
-                instructionsDiv.style.display = 'none';
-                toggleButton.textContent = 'Anleitung anzeigen';
+                instructions.style.display = 'none';
+                button.textContent = 'Anleitung anzeigen';
             }
         }
 
-        // JAVASCRIPT-LOGIK FÜR DEN FEHLER-REPORT-BUTTON
+        // FEHLER-REPORT-MODAL
+        document.getElementById('open-report-button').addEventListener('click', () => {
+            document.getElementById('report-modal').style.display = 'flex';
+        });
+
+        document.querySelector('.close-button').addEventListener('click', () => {
+            document.getElementById('report-modal').style.display = 'none';
+        });
+
+        window.addEventListener('click', (event) => {
+            const modal = document.getElementById('report-modal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Formular-Handling mit Formspree
         var form = document.getElementById("my-form");
-        var openButton = document.getElementById("open-report-button");
-        var modal = document.getElementById("report-modal");
-        var closeButton = document.querySelector(".close-button");
-
-        function openReportModal() {
-            modal.style.display = "flex";
-            openButton.classList.remove("expanded");
-        }
-
-        openButton.onclick = function() {
-            if (openButton.classList.contains("expanded")) {
-                openReportModal();
-            } else {
-                openButton.classList.add("expanded");
-                setTimeout(() => {
-                    openButton.classList.remove("expanded");
-                }, 5000);
-            }
-        };
-
-        closeButton.onclick = function() {
-            modal.style.display = "none";
-            document.getElementById("my-form-status").innerHTML = "";
-            form.reset();
-        }
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-                document.getElementById("my-form-status").innerHTML = "";
-                form.reset();
-            }
-        }
+        var status = document.getElementById("my-form-status");
 
         async function handleSubmit(event) {
             event.preventDefault();
-            var status = document.getElementById("my-form-status");
             var data = new FormData(event.target);
             fetch(event.target.action, {
                 method: form.method,
@@ -1314,10 +1112,10 @@
                 }
             }).then(response => {
                 if (response.ok) {
-                    status.innerHTML = "Vielen Dank für deinen Fehlerbericht! Wir kümmern uns darum.";
+                    status.innerHTML = "Danke für deine Meldung!";
                     form.reset();
                     setTimeout(() => {
-                        modal.style.display = "none";
+                        document.getElementById('report-modal').style.display = 'none';
                         status.innerHTML = "";
                     }, 3000);
                 } else {
@@ -1325,12 +1123,12 @@
                         if (Object.hasOwn(data, 'errors')) {
                             status.innerHTML = data["errors"].map(error => error["message"]).join(", ");
                         } else {
-                            status.innerHTML = "Hoppla! Es gab ein Problem beim Senden des Formulars.";
+                            status.innerHTML = "Oops! Es gab ein Problem beim Senden deiner Meldung.";
                         }
                     })
                 }
             }).catch(error => {
-                status.innerHTML = "Hoppla! Es gab ein Problem beim Senden des Formulars.";
+                status.innerHTML = "Oops! Es gab ein Problem beim Senden deiner Meldung.";
             });
         }
         form.addEventListener("submit", handleSubmit);
