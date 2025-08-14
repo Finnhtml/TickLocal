@@ -3,148 +3,386 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TickLocal</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <title>TickLocal - Ticketing</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        /* === Grundlegende Stile für helles und dunkles Design === */
         :root {
-            --primary-color: #667eea;
-            --secondary-color: #764ba2;
-            --success-color: #48bb78;
-            --error-color: #e53e3e;
-            --warning-color: #ed8936;
-            --bg-color: #f8fafc;
-            --container-bg: #ffffff;
-            --text-color: #2d3748;
-            --light-text-color: #718096;
+            --bg-color: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bg-container: rgba(255, 255, 255, 0.95);
+            --bg-input: #ffffff;
+            --color-text-primary: #1a1a1a;
+            --color-text-secondary: #4a5568;
+            --color-link-text: #2d3748;
             --border-color: #e2e8f0;
-            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
-            --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.1);
+            --bg-stats: #f7f7f9;
+            --bg-instructions: #f8fafc;
+            --bg-filter-buttons: #e2e8f0;
+            --color-filter-buttons: #4a5568;
+            --border-color-hover: #667eea;
+            --qr-code-bg: #fff;
+            --qr-code-border: #e2e8f0;
+            --border-gradient: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+            --bg-modal: #fefefe;
+        }
+
+        body.dark-mode {
+            --bg-color: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            --bg-container: rgba(31, 41, 55, 0.95);
+            --bg-input: #2d3748;
+            --color-text-primary: #f9fafb;
+            --color-text-secondary: #cbd5e0;
+            --color-link-text: #f9fafb;
+            --border-color: #4a5568;
+            --bg-stats: #2d3748;
+            --bg-instructions: #2d3748;
+            --bg-filter-buttons: #4a5568;
+            --color-filter-buttons: #cbd5e0;
+            --border-color-hover: #4299e1;
+            --qr-code-bg: #1f2937;
+            --qr-code-border: #4a5568;
+            --border-gradient: linear-gradient(90deg, transparent, #4a5568, transparent);
+            --bg-modal: #2d3748;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, var(--bg-color) 0%, #f0f4f8 100%);
-            color: var(--text-color);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             line-height: 1.6;
-            margin: 0;
-            padding: 2rem;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
+            color: var(--color-text-primary);
+            background: var(--bg-color);
             min-height: 100vh;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: background 0.5s ease-in-out;
         }
 
         .container {
-            width: 100%;
-            max-width: 800px;
-            background-color: var(--container-bg);
+            background: var(--bg-container);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 3rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-            border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05);
+            max-width: 900px;
+            width: 100%;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: containerFadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            transition: background 0.5s, box-shadow 0.5s;
+        }
+        
+        @keyframes containerFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        h1, h2 {
-            font-weight: 600;
-            color: var(--text-color);
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+            border-radius: 24px 24px 0 0;
         }
 
         h1 {
-            font-size: 3rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             text-align: center;
             margin-bottom: 0.5rem;
-            letter-spacing: -1px;
+            font-size: 3.2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            animation: textFadeIn 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s forwards;
+            opacity: 0;
+            transform: translateY(10px);
         }
 
+        @keyframes textFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        body.dark-mode h1 {
+            background: linear-gradient(135deg, #4299e1 0%, #5a67d8 100%);
+            -webkit-background-clip: text;
+        }
+        
         h2 {
+            color: var(--color-link-text);
+            margin-top: 2.5rem;
+            margin-bottom: 1.5rem;
             font-size: 1.8rem;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            text-align: center;
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 0.8rem;
+            transition: color 0.5s;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
         }
 
         p {
             text-align: center;
-            margin-bottom: 2rem;
-            color: var(--light-text-color);
+            margin-bottom: 2.5rem;
+            color: var(--color-text-secondary);
             font-size: 1.1rem;
+            line-height: 1.7;
+            animation: textFadeIn 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.7s forwards;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: color 0.5s;
         }
 
-        button, input[type="text"], input[type="password"], input[type="date"], textarea, select, input[type="file"] {
-            width: 100%;
-            padding: 1rem;
-            margin-top: 1rem;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            background-color: var(--bg-color);
-            font-size: 1rem;
-            color: var(--text-color);
-            transition: all 0.3s ease;
-            box-sizing: border-box;
-            font-family: inherit;
-        }
-
-        input::placeholder {
-            color: var(--light-text-color);
-        }
-
-        button {
-            cursor: pointer;
-            color: white;
+        p strong {
+            color: var(--color-link-text);
             font-weight: 600;
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            border: none;
-            box-shadow: 0 4px 14px rgba(102, 126, 234, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
+            transition: color 0.5s;
         }
         
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        .ticket-stats {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background-color: var(--bg-stats);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: background-color 0.5s, border-color 0.5s;
         }
 
-        button:active {
-            transform: translateY(0);
-            box-shadow: 0 4px 14px rgba(102, 126, 234, 0.3);
-        }
-
-        input:focus, textarea:focus, select:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        .ticket-stats p {
+            margin: 0.5rem 0;
+            font-size: 1rem;
+            color: var(--color-text-secondary);
+            transition: color 0.5s;
         }
 
         label {
             display: block;
             margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--color-link-text);
             font-weight: 500;
-            color: var(--text-color);
+            font-size: 0.95rem;
+            letter-spacing: 0.01em;
+            transition: color 0.5s;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="password"],
+        input[type="file"],
+        select {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1.5rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            color: var(--color-text-primary);
+            background: var(--bg-input);
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        input:focus {
+            border-color: var(--border-color-hover);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            outline: none;
+            transform: translateY(-1px);
+        }
+
+        body.dark-mode input:focus {
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+        }
+
+        input::placeholder {
+            color: #a0aec0;
+        }
+        
+        body.dark-mode input::placeholder {
+            color: #718096;
+        }
+
+        #searchTickets {
+            padding: 1rem 1.2rem;
+            margin-bottom: 1.5rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            color: var(--color-text-primary);
+            background: var(--bg-input);
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        #searchTickets:focus {
+            border-color: var(--border-color-hover);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            outline: none;
+        }
+
+        button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 2rem;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 14px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        body.dark-mode button {
+             background: linear-gradient(135deg, #4299e1 0%, #5a67d8 100%);
+             box-shadow: 0 4px 14px rgba(66, 153, 225, 0.3);
+        }
+        
+        button:not(#open-report-button):hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        body.dark-mode button:not(#open-report-button):hover {
+            box-shadow: 0 8px 25px rgba(66, 153, 225, 0.4);
+        }
+        
+        button:not(#open-report-button):active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+
+        .primary-button {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            box-shadow: 0 4px 14px rgba(72, 187, 120, 0.3);
+        }
+        
+        .primary-button:hover {
+            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.4);
+        }
+
+        #ticketList {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            position: relative;
+        }
+
+        #ticketList::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--border-gradient);
+            transition: background 0.5s;
         }
 
         #ticketList {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
         }
-
-        .ticket-item {
-            background-color: var(--bg-color);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 1.5rem;
-            text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+        
+        .ticket-name-status {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+        }
+        
+        .ticket-item {
+            background: linear-gradient(135deg, #fff 0%, #f8fafc 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+        }
+        
+        body.dark-mode .ticket-item {
+            background: linear-gradient(135deg, #2d3748 0%, #1f2937 100%);
+            transition: all 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .ticket-item.highlight {
+            animation: highlight 1.5s ease-in-out;
+        }
+        
+        @keyframes highlight {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.5); }
+            50% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(102, 126, 234, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(102, 126, 234, 0); }
         }
 
         .ticket-item::before {
@@ -152,26 +390,23 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
+            right: 0;
             height: 3px;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            background: linear-gradient(90deg, #667eea, #764ba2);
         }
 
         .ticket-item:hover {
             transform: translateY(-4px);
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
-            border-color: var(--primary-color);
-        }
-        
-        .ticket-item:hover button {
-            background: var(--primary-color);
+            border-color: var(--border-color-hover);
         }
 
         .ticket-item strong {
             font-size: 1.3rem;
-            color: var(--text-color);
+            color: var(--color-link-text);
             margin-bottom: 0.5rem;
             font-weight: 600;
+            transition: color 0.5s;
         }
 
         .ticket-item img {
@@ -183,8 +418,56 @@
         }
 
         .ticket-item:hover img {
-            border-color: var(--primary-color);
+            border-color: var(--border-color-hover);
             transform: scale(1.02);
+        }
+        
+        .ticket-item button {
+            margin: 0.25rem 0;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            width: 100%;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-buttons button {
+            flex-grow: 1;
+            margin: 0;
+            padding: 0.75rem 1.25rem;
+            font-size: 0.9rem;
+            background: var(--bg-filter-buttons);
+            color: var(--color-filter-buttons);
+            box-shadow: none;
+            transition: background 0.5s, color 0.5s;
+        }
+
+        .filter-buttons button:hover {
+            background: #cbd5e0;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        body.dark-mode .filter-buttons button:hover {
+            background: #4a5568;
+        }
+
+        .filter-buttons button.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 14px rgba(102, 126, 234, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        body.dark-mode .filter-buttons button.active {
+            background: linear-gradient(135deg, #4299e1 0%, #5a67d8 100%);
+            box-shadow: 0 4px 14px rgba(66, 153, 225, 0.3);
         }
 
         #scannerMode {
@@ -201,19 +484,24 @@
             justify-content: center;
             align-items: center;
             color: white;
-            padding: 1rem;
         }
 
         #reader {
             width: 350px;
             height: 350px;
             background: #000;
-            border: 3px solid var(--primary-color);
+            border: 3px solid #667eea;
             border-radius: 20px;
             margin-bottom: 2rem;
             box-shadow: 0 0 40px rgba(102, 126, 234, 0.3);
             position: relative;
             overflow: hidden;
+            transition: all 0.5s ease-in-out;
+        }
+
+        body.dark-mode #reader {
+            border-color: #4299e1;
+            box-shadow: 0 0 40px rgba(66, 153, 225, 0.3);
         }
 
         #reader::before {
@@ -223,10 +511,14 @@
             left: -2px;
             right: -2px;
             bottom: -2px;
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), #f093fb, var(--primary-color));
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #667eea);
             border-radius: 22px;
             z-index: -1;
             animation: borderGlow 3s linear infinite;
+        }
+
+        body.dark-mode #reader::before {
+             background: linear-gradient(45deg, #4299e1, #5a67d8, #5a67d8, #4299e1);
         }
 
         @keyframes borderGlow {
@@ -251,16 +543,16 @@
             animation: scanResultFadeIn 0.5s ease-out;
             transition: all 0.3s ease;
         }
-           
+        
         #scanResult.success {
-            background: linear-gradient(135deg, var(--success-color) 0%, #38a169 100%);
-            border-color: var(--success-color);
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            border-color: #48bb78;
             box-shadow: 0 8px 32px rgba(72, 187, 120, 0.3);
         }
 
         #scanResult.error {
-            background: linear-gradient(135deg, var(--error-color) 0%, #c53030 100%);
-            border-color: var(--error-color);
+            background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+            border-color: #e53e3e;
             box-shadow: 0 8px 32px rgba(229, 62, 62, 0.3);
         }
 
@@ -286,7 +578,7 @@
         }
 
         #scannerMode input:focus {
-            border-color: var(--primary-color);
+            border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
             outline: none;
         }
@@ -303,7 +595,7 @@
         }
 
         #instructions {
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            background: var(--bg-instructions);
             border: 1px solid var(--border-color);
             border-radius: 16px;
             padding: 2rem;
@@ -311,6 +603,7 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
             position: relative;
             overflow: hidden;
+            transition: background 0.5s, border-color 0.5s, color 0.5s;
         }
 
         #instructions::before {
@@ -332,11 +625,12 @@
         #instructions li {
             counter-increment: step-counter;
             margin-bottom: 1rem;
-            color: #4a5568;
+            color: var(--color-text-secondary);
             font-size: 1rem;
             padding-left: 3rem;
             position: relative;
             line-height: 1.6;
+            transition: color 0.5s;
         }
 
         #instructions li::before {
@@ -344,7 +638,7 @@
             position: absolute;
             left: 0;
             top: 0;
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             width: 2rem;
             height: 2rem;
@@ -355,12 +649,17 @@
             font-weight: 600;
             font-size: 0.9rem;
         }
+        
+        body.dark-mode #instructions li::before {
+            background: linear-gradient(135deg, #4299e1 0%, #5a67d8 100%);
+        }
 
         #instructions h3 {
-            color: var(--text-color);
+            color: var(--color-link-text);
             margin-bottom: 1.5rem;
             font-size: 1.5rem;
             font-weight: 600;
+            transition: color 0.5s;
         }
 
         #instructions-toggle-button {
@@ -390,7 +689,7 @@
         #progressbar {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start; /* Änderung für bessere Ausrichtung */
+            align-items: center;
             width: 100%;
             margin-bottom: 3rem;
             position: relative;
@@ -403,11 +702,16 @@
             width: 100%;
             height: 3px;
             background: linear-gradient(90deg, #e2e8f0 0%, #cbd5e0 50%, #e2e8f0 100%);
-            top: calc(50% + 25px); /* Positionierung anpassen */
+            top: 50%;
             left: 0;
             transform: translateY(-50%);
             z-index: 1;
             border-radius: 2px;
+            transition: background 0.5s;
+        }
+        
+        body.dark-mode #progressbar::before {
+            background: linear-gradient(90deg, #4a5568 0%, #718096 50%, #4a5568 100%);
         }
 
         #progressbar::after {
@@ -415,13 +719,17 @@
             position: absolute;
             width: var(--progress-width, 0%);
             height: 3px;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            top: calc(50% + 25px); /* Positionierung anpassen */
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            top: 50%;
             left: 0;
             transform: translateY(-50%);
             z-index: 2;
             transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             border-radius: 2px;
+        }
+        
+        body.dark-mode #progressbar::after {
+            background: linear-gradient(90deg, #4299e1, #5a67d8);
         }
 
         .step-item {
@@ -438,7 +746,7 @@
             height: 50px;
             border-radius: 50%;
             background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%);
-            color: var(--light-text-color);
+            color: #718096;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -447,18 +755,28 @@
             border: 3px solid #fff;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            margin-bottom: 1rem; /* Abstand zum Titel hinzufügen */
+        }
+        
+        body.dark-mode .step-circle {
+            background: linear-gradient(135deg, #4a5568 0%, #718096 100%);
+            border-color: #1f2937;
+            color: #a0aec0;
         }
 
         .step-circle.active {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             transform: scale(1.1);
             box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
         }
+        
+        body.dark-mode .step-circle.active {
+            background: linear-gradient(135deg, #4299e1 0%, #5a67d8 100%);
+            box-shadow: 0 8px 25px rgba(66, 153, 225, 0.3);
+        }
 
         .step-circle.completed {
-            background: linear-gradient(135deg, var(--success-color) 0%, #38a169 100%);
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
             color: white;
             box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
         }
@@ -470,7 +788,7 @@
 
         .step-title {
             margin-top: 0.8rem;
-            color: var(--light-text-color);
+            color: #718096;
             font-size: 0.9rem;
             text-align: center;
             font-weight: 500;
@@ -479,9 +797,14 @@
 
         .step-circle.active + .step-title,
         .step-circle.completed + .step-title {
-            color: var(--text-color);
+            color: var(--color-link-text);
             font-weight: 600;
             transform: translateY(-2px);
+        }
+        
+        body.dark-mode .step-circle.active + .step-title,
+        body.dark-mode .step-circle.completed + .step-title {
+            color: #f9fafb;
         }
 
         .navigation-buttons {
@@ -505,9 +828,13 @@
         .navigation-buttons button.prev:hover {
             box-shadow: 0 8px 25px rgba(113, 128, 150, 0.4);
         }
+        
+        body.dark-mode .navigation-buttons button.prev {
+             background: linear-gradient(135deg, #a0aec0 0%, #718096 100%);
+        }
 
         .navigation-buttons button.next {
-            background: linear-gradient(135deg, var(--success-color) 0%, #38a169 100%);
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
             box-shadow: 0 4px 14px rgba(72, 187, 120, 0.3);
         }
 
@@ -520,7 +847,7 @@
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background: linear-gradient(135deg, var(--success-color) 0%, #38a169 100%);
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
             color: white;
             padding: 1rem 1.5rem;
             border-radius: 12px;
@@ -542,49 +869,74 @@
         }
 
         #messageBox.error {
-            background: linear-gradient(135deg, var(--error-color) 0%, #c53030 100%);
+            background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
             box-shadow: 0 8px 25px rgba(229, 62, 62, 0.3);
         }
 
         #messageBox.warning {
-            background: linear-gradient(135deg, var(--warning-color) 0%, #dd6b20 100%);
+            background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
             box-shadow: 0 8px 25px rgba(237, 137, 54, 0.3);
+        }
+        
+        #dark-mode-toggle {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 100;
+            width: 40px;
+            height: 40px;
+            background: #fff;
+            border: 2px solid #ccc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        #dark-mode-toggle:hover {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transform: scale(1.05);
+        }
+
+        body.dark-mode #dark-mode-toggle {
+            background: #2d3748;
+            border-color: #4a5568;
+            color: #cbd5e0;
         }
 
         @media (max-width: 768px) {
             body {
                 padding: 1rem;
-                align-items: center;
             }
             .container {
-                padding: 1.5rem;
+                padding: 2rem;
                 border-radius: 16px;
                 margin: 1rem 0;
             }
             h1 {
-                font-size: 2rem;
+                font-size: 2.5rem;
             }
             h2 {
                 font-size: 1.5rem;
             }
             p {
-                font-size: 0.95rem;
+                font-size: 1rem;
             }
-            button, input[type="text"], input[type="password"], input[type="date"], textarea, select {
+            button {
+                padding: 0.8rem 1.5rem;
                 font-size: 0.95rem;
-                padding: 0.8rem;
             }
             #reader {
-                width: 80vw;
-                height: 80vw;
-                max-width: 300px;
-                max-height: 300px;
+                width: 280px;
+                height: 280px;
             }
             #scanResult {
                 font-size: 1.2rem;
-                padding: 1rem;
-                min-width: auto;
-                width: 90%;
+                padding: 1.5rem;
+                min-width: 280px;
             }
             #ticketList {
                 grid-template-columns: 1fr;
@@ -594,9 +946,6 @@
                 height: 40px;
                 font-size: 1rem;
             }
-            .step-title {
-                font-size: 0.8rem;
-            }
             #messageBox {
                 width: 90%;
                 left: 5%;
@@ -605,32 +954,359 @@
             }
             #messageBox.show {
                 transform: translateX(0) translateY(0);
-                top: 20px;
             }
-            .navigation-buttons {
+            #progressbar {
+                padding: 1.5rem 0;
+                margin-bottom: 2rem;
+            }
+            .ticket-action-buttons {
                 flex-direction: column;
-            }
-            .ticket-item:hover {
-                transform: none; /* Hover-Effekte auf Mobilgeräten deaktivieren */
-                box-shadow: none;
             }
             #open-report-button {
                 bottom: 1rem;
                 right: 1rem;
-                width: 50px;
-                height: 50px;
-                font-size: 1rem;
             }
-            #open-report-button.expanded {
-                width: 180px;
+            #dark-mode-toggle {
+                 top: 1rem;
+                 right: 1rem;
             }
-            #open-report-button span {
-                font-size: 0.9rem;
+        }
+        
+        /* === Optimierung für Tablets (769px - 1024px) === */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .container {
+                padding: 3.5rem;
+                max-width: 95%;
             }
+            h1 {
+                font-size: 3rem;
+            }
+            h2 {
+                font-size: 1.6rem;
+            }
+            p {
+                font-size: 1.05rem;
+            }
+            #ticketList {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+            #reader {
+                width: 400px;
+                height: 400px;
+            }
+            #scanResult {
+                font-size: 1.5rem;
+            }
+            #dark-mode-toggle {
+                top: 2rem;
+                right: 2rem;
+            }
+        }
+
+
+        /* Floating action animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        .ticket-item:hover {
+            animation: float 2s ease-in-out infinite;
+        }
+
+        /* Subtle pulse for active elements */
+        .step-circle.active {
+            animation: pulse 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3); }
+            100% { box-shadow: 0 8px 35px rgba(102, 126, 234, 0.5); }
+        }
+
+        body.dark-mode .step-circle.active {
+             animation-name: pulse-dark;
+        }
+
+        @keyframes pulse-dark {
+             0% { box-shadow: 0 8px 25px rgba(66, 153, 225, 0.3); }
+             100% { box-shadow: 0 8px 35px rgba(66, 153, 225, 0.5); }
+        }
+
+        /* NEUE CSS-Regeln für den Fehler-Report-Button */
+        #open-report-button {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 999;
+            width: 60px;
+            height: 60px;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: 600;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-decoration: none;
+        }
+        
+        body.dark-mode #open-report-button {
+             background: linear-gradient(135deg, #4299e1 0%, #5a67d8 100%);
+             box-shadow: 0 8px 25px rgba(66, 153, 225, 0.3);
+        }
+
+        #open-report-button:hover {
+            box-shadow: 0 8px 35px rgba(102, 126, 234, 0.5);
+            transform: translateY(-4px) scale(1.05);
+        }
+        
+        body.dark-mode #open-report-button:hover {
+             box-shadow: 0 8px 35px rgba(66, 153, 225, 0.5);
+        }
+
+        #open-report-button.expanded {
+            width: 200px;
+            border-radius: 30px;
+            padding: 1rem 1.5rem;
+        }
+
+        #open-report-button span {
+            display: none;
+            margin-left: 0.5rem;
+            font-size: 1rem;
+        }
+        
+        #open-report-button.expanded span {
+            display: inline;
+        }
+        
+        /* Stil des Modal-Containers */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+        
+        body.dark-mode .modal {
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        /* Inhalt des Modals */
+        .modal-content {
+            background-color: var(--bg-modal);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            animation: modalFadeIn 0.3s ease-out;
+            border: 1px solid var(--border-color);
+            margin: auto;
+            transition: background-color 0.5s, border-color 0.5s;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Schließen-Button */
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: #000;
+            text-decoration: none;
+        }
+        
+        body.dark-mode .close-button {
+             color: #718096;
+        }
+        
+        body.dark-mode .close-button:hover {
+            color: #fefefe;
+        }
+
+        /* Formular-Elemente im Modal */
+        .modal-content form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-content label {
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--color-text-primary);
+            transition: color 0.5s;
+        }
+
+        .modal-content input[type="text"], 
+        .modal-content textarea, 
+        .modal-content select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: inherit;
+            background: var(--bg-input);
+            color: var(--color-text-primary);
+            transition: background 0.5s, border-color 0.5s, color 0.5s;
+        }
+
+        .modal-content textarea {
+            resize: vertical;
+        }
+
+        .modal-content button[type="submit"] {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        body.dark-mode .modal-content button[type="submit"] {
+             background: linear-gradient(135deg, #4299e1 0%, #5a67d8 100%);
+        }
+
+        .modal-content button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 14px rgba(102, 126, 234, 0.3);
+        }
+        
+        body.dark-mode .modal-content button[type="submit"]:hover {
+             box-shadow: 0 4px 14px rgba(66, 153, 225, 0.3);
+        }
+        
+        .ticket-action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .ticket-action-buttons button {
+            flex-grow: 1;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .ticket-action-buttons .edit-button {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            box-shadow: 0 4-14px rgba(66, 153, 225, 0.3);
+        }
+        
+        .ticket-action-buttons .delete-button {
+            background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+            box-shadow: 0 4-14px rgba(245, 101, 101, 0.3);
+        }
+        
+        .toggle-status-button {
+             background: linear-gradient(135deg, #a0aec0 0%, #718096 100%);
+             box-shadow: 0 4-14px rgba(160, 174, 192, 0.3);
+        }
+        
+        .toggle-status-button:hover {
+             box-shadow: 0 8-25px rgba(160, 174, 192, 0.4);
+        }
+        
+        #eventList {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+
+        .event-item {
+            background: linear-gradient(135deg, #fff 0%, #f8fafc 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            animation: fadeIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+        }
+
+        body.dark-mode .event-item {
+            background: linear-gradient(135deg, #2d3748 0%, #1f2937 100%);
+        }
+
+        .event-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+            border-color: var(--border-color-hover);
+        }
+
+        .event-item strong {
+            font-size: 1.5rem;
+            color: var(--color-link-text);
+            transition: color 0.5s;
+        }
+
+        .event-item span {
+            display: block;
+            margin-top: 0.5rem;
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Anpassung für kleinere Bildschirme */
+        @media (max-width: 768px) {
             .modal-content {
-                padding: 20px;
-                width: 95%;
+                max-height: 90vh;
+                overflow-y: auto;
             }
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .button-group button {
+            flex-grow: 1;
+            margin: 0;
         }
     </style>
 </head>
@@ -645,38 +1321,48 @@
         <div id="instructions" style="display: none;">
             <h3>So funktioniert TickLocal:</h3>
             <ol>
-                <li>Gib einen Eventnamen, das Datum und eine PIN für den Scan-Modus ein und klicke auf "Event erstellen".</li>
-                <li>Füge nacheinander die Namen der Gäste hinzu und klicke auf "Ticket hinzufügen". Für jeden Gast wird ein QR-Code generiert.</li>
-                <li>Du kannst die Tickets mit dem "Ticket teilen"-Button an die jeweiligen Personen senden.</li>
-                <li>Um die Ticket-Daten zu speichern, klicke auf "Event & Tickets herunterladen".</li>
-                <li>Um ein gespeichertes Event zu laden, klicke auf "Event & Tickets hochladen".</li>
-                <li>Klicke auf "Scan-Modus starten", um Tickets beim Einlass zu überprüfen.</li>
-                <li>Scanne die QR-Codes der Tickets. Die App zeigt an, ob das Ticket gültig ist.</li>
-                <li>Um den Scan-Modus zu beenden, gib deine PIN ein.</li>
+                <li>Verwalte deine Events auf der Startseite: Lade ein gespeichertes Event per JSON hoch oder erstelle ein neues.</li>
+                <li>Wähle ein Event aus, um zu den Tickets zu gelangen.</li>
+                <li>Füge Tickets manuell hinzu oder nutze den neuen Import für `.txt`-Dateien. Wähle dabei den gewünschten Ticket-Typ aus.</li>
+                <li>Sichere deine Daten jederzeit über den "Event & Tickets herunterladen"-Button.</li>
+                <li>Starte den Scan-Modus, um Tickets zu überprüfen. Um den Scan-Modus zu beenden, gib die Event-PIN ein.</li>
             </ol>
         </div>
 
         <div id="progressbar">
             <div class="step-item">
                 <div class="step-circle" id="circle1">1</div>
-                <div class="step-title">Event erstellen</div>
+                <div class="step-title">Start</div>
             </div>
             <div class="step-item">
                 <div class="step-circle" id="circle2">2</div>
-                <div class="step-title">Tickets</div>
+                <div class="step-title">Event-Details</div>
             </div>
             <div class="step-item">
                 <div class="step-circle" id="circle3">3</div>
-                <div class="step-title">Speichern / Laden</div>
+                <div class="step-title">Tickets</div>
             </div>
             <div class="step-item">
                 <div class="step-circle" id="circle4">4</div>
                 <div class="step-title">Scanner</div>
             </div>
         </div>
-
+        
         <div id="step1" class="step-content">
-            <h2>Event-Details erstellen</h2>
+            <h2>Events verwalten</h2>
+            <p>Wähle ein Event aus, lade ein gespeichertes hoch oder erstelle ein neues.</p>
+            <div id="eventList"></div>
+            <div style="margin-top: 2rem;">
+                <label for="uploadEventFile">Events & Tickets hochladen (JSON):</label>
+                <input type="file" id="uploadEventFile" accept="application/json" onchange="uploadEvents(event)">
+                <button onclick="createNewEvent()" style="margin-top: 1rem;">Neues Event erstellen</button>
+            </div>
+        </div>
+
+
+        <div id="step2" class="step-content">
+            <h2>Event-Details bearbeiten</h2>
+            <p>Bearbeite die Details für das ausgewählte Event: <strong id="currentEventNameDetail"></strong></p>
             <label for="eventName">Eventname:</label>
             <input id="eventName" type="text" placeholder="Z.B. Sommerfest 2025">
 
@@ -687,29 +1373,58 @@
             <input id="eventPin" type="password" placeholder="Mindestens 4 Ziffern">
             
             <div class="navigation-buttons">
-                <button onclick="nextStep()" class="next">Event erstellen & Weiter</button>
-            </div>
-        </div>
-
-        <div id="step2" class="step-content">
-            <h2>Tickets hinzufügen</h2>
-            <p>Aktuelles Event: <strong id="currentEventName"></strong></p>
-            <label for="ticketName">Name des Gastes:</label>
-            <input id="ticketName" type="text" placeholder="Z.B. Max Mustermann">
-            <button onclick="addTicket()">Ticket hinzufügen</button>
-            <div id="ticketList"></div>
-            <div class="navigation-buttons">
-                <button onclick="prevStep()" class="prev">Zurück</button>
-                <button onclick="nextStep()" class="next">Weiter zu Speichern/Laden</button>
+                <button onclick="prevStep()" class="prev">Zurück zur Event-Liste</button>
+                <button onclick="nextStep()" class="next">Tickets verwalten</button>
             </div>
         </div>
 
         <div id="step3" class="step-content">
-            <h2>Event speichern oder laden</h2>
-            <p>Hier kannst du dein Event inklusive aller Tickets speichern oder ein vorhandenes Event laden.</p>
-            <button onclick="downloadEvent()">Event & Tickets herunterladen</button>
-            <label for="uploadEventFile">Event & Tickets hochladen (JSON):</label>
-            <input type="file" id="uploadEventFile" accept="application/json" onchange="uploadEvent(event)">
+            <h2>Tickets hinzufügen</h2>
+            <p>Aktuelles Event: <strong id="currentEventName"></strong></p>
+            <div id="ticket-statistics" class="ticket-stats"></div>
+            
+            <div class="button-group">
+                <button onclick="downloadCurrentEvent()">Event & Tickets herunterladen</button>
+                <button onclick="exportTicketListAsText()">Ticket-Liste exportieren (Text)</button>
+            </div>
+
+            <hr style="margin: 2rem 0; border: none; border-top: 1px solid var(--border-color); transition: border-top 0.5s;">
+            
+            <h3>Ticket einzeln hinzufügen</h3>
+            <label for="ticketName">Name des Gastes:</label>
+            <input id="ticketName" type="text" placeholder="Z.B. Max Mustermann">
+            
+            <label for="ticketType">Ticket-Typ:</label>
+            <select id="ticketType">
+                <option value="Normal">Normal</option>
+                <option value="VIP">VIP</option>
+                <option value="Early Bird">Early Bird</option>
+                <option value="Freikarte">Freikarte</option>
+                <option value="Tageskasse">Tageskasse</option>
+            </select>
+            
+            <button onclick="addTicket()">Ticket hinzufügen</button>
+
+            <hr style="margin: 2rem 0; border: none; border-top: 1px solid var(--border-color); transition: border-top 0.5s;">
+            
+            <h3>Ticket-Liste importieren</h3>
+            <p>Lade eine `.txt`- oder `.csv`-Datei mit Namen (ein Name pro Zeile) hoch, um Tickets in großen Mengen hinzuzufügen.</p>
+            <label for="uploadTicketList">Ticket-Liste hochladen (TXT/CSV):</label>
+            <input type="file" id="uploadTicketList" accept=".txt,.csv" onchange="importTicketList(event)">
+            
+            <hr style="margin: 2rem 0; border: none; border-top: 1px solid var(--border-color); transition: border-top 0.5s;">
+
+            <h3>Tickets verwalten</h3>
+            <div class="filter-buttons">
+                <button id="filterAll" class="active" onclick="filterTickets('all')">Alle (<span id="countAll">0</span>)</button>
+                <button id="filterCheckedIn" onclick="filterTickets('checkedIn')">Eingescannt (<span id="countCheckedIn">0</span>)</button>
+                <button id="filterPending" onclick="filterTickets('pending')">Nicht eingescannt (<span id="countPending">0</span>)</button>
+            </div>
+
+            <label for="searchTickets">Ticket suchen:</label>
+            <input type="text" id="searchTickets" placeholder="Nach Name suchen..." onkeyup="filterTickets(currentFilter)">
+
+            <div id="ticketList"></div>
             <div class="navigation-buttons">
                 <button onclick="prevStep()" class="prev">Zurück</button>
                 <button onclick="nextStep()" class="next">Weiter zum Scanner</button>
@@ -727,35 +1442,82 @@
     </div>
     
     <button id="open-report-button">🐞<span>Fehler melden</span></button>
+    <div id="dark-mode-toggle" onclick="toggleDarkMode()">☀️</div>
 
     <div id="report-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2>Fehler melden</h2>
+        <p>Bitte beschreibe das Problem so detailliert wie möglich. Deine Daten werden anonymisiert übermittelt.</p>
+        
+        <form id="my-form" action="https://formspree.io/f/xeozvlbr" method="POST">
+          <label for="error-type">Art des Problems:</label>
+          <select name="Art des Problems" id="error-type" required>
+            <option value="visueller_fehler">Visueller Fehler (Darstellung)</option>
+            <option value="funktionaler_fehler">Funktionaler Fehler (Button, Link funktioniert nicht)</option>
+            <option value="performance_problem">Performance-Problem (Seite ist langsam)</option>
+            <option value="inhaltlicher_fehler">Inhaltlicher Fehler (Tippfehler, falsche Info)</option>
+            <option value="sonstiges">Sonstiges</option>
+          </select>
+
+          <label for="description">Beschreibung des Fehlers:</label>
+          <textarea id="description" name="Beschreibung des Fehlers" placeholder="Bitte beschreibe den Fehler hier so genau wie möglich." rows="5" required></textarea>
+
+          <label for="page-url">Seite, auf der das Problem auftrat (optional):</label>
+          <input type="text" id="page-url" name="Seite" placeholder="z.B. https://deine-website.de/seite-xy" />
+
+          <label for="browser-info">Welchen Browser nutzt du? (optional)</label>
+          <input type="text" id="browser-info" name="Browser" placeholder="z.B. Chrome, Firefox, Safari" />
+          
+          <button id="my-form-button" type="submit">Senden</button>
+          <p id="my-form-status"></p>
+        </form>
+      </div>
+    </div>
+    
+    <div id="pin-modal" class="modal">
         <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <h2>Fehler melden</h2>
-            <p>Bitte beschreibe das Problem so detailliert wie möglich. Deine Daten werden anonymisiert übermittelt.</p>
-            
-            <form id="my-form" action="https://formspree.io/f/xeozvlbr" method="POST">
-                <label for="error-type">Art des Problems:</label>
-                <select name="Art des Problems" id="error-type" required>
-                    <option value="visueller_fehler">Visueller Fehler (Darstellung)</option>
-                    <option value="funktionaler_fehler">Funktionaler Fehler (Button, Link funktioniert nicht)</option>
-                    <option value="performance_problem">Performance-Problem (Seite ist langsam)</option>
-                    <option value="inhaltlicher_fehler">Inhaltlicher Fehler (Tippfehler, falsche Info)</option>
-                    <option value="sonstiges">Sonstiges</option>
-                </select>
+            <span class="close-button" onclick="closePinModal()">&times;</span>
+            <h2>PIN-Bestätigung</h2>
+            <p>Bitte gib die Event-PIN ein, um diese Aktion zu bestätigen.</p>
+            <input type="password" id="actionPinInput" placeholder="PIN eingeben">
+            <button onclick="confirmAction()">Bestätigen</button>
+        </div>
+    </div>
+    
+    <div id="edit-ticket-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeEditModal()">&times;</span>
+            <h2>Ticket bearbeiten</h2>
+            <input type="hidden" id="editTicketId">
+            <label for="editTicketName">Neuer Name des Gastes:</label>
+            <input type="text" id="editTicketName" placeholder="Neuer Name">
+            <label for="editTicketType">Neuer Ticket-Typ:</label>
+            <select id="editTicketType">
+                <option value="Normal">Normal</option>
+                <option value="VIP">VIP</option>
+                <option value="Early Bird">Early Bird</option>
+                <option value="Freikarte">Freikarte</option>
+                <option value="Tageskasse">Tageskasse</option>
+            </select>
+            <button onclick="saveEditedTicket()">Speichern</button>
+        </div>
+    </div>
+    
+    <div id="new-event-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeNewEventModal()">&times;</span>
+            <h2>Neues Event erstellen</h2>
+            <p>Bitte gib die Details für dein neues Event ein.</p>
+            <label for="newEventName">Eventname:</label>
+            <input id="newEventName" type="text" placeholder="Z.B. Sommerfest 2025">
 
-                <label for="description">Beschreibung des Fehlers:</label>
-                <textarea id="description" name="Beschreibung des Fehlers" placeholder="Bitte beschreibe den Fehler hier so genau wie möglich." rows="5" required></textarea>
+            <label for="newEventDate">Datum des Events:</label>
+            <input id="newEventDate" type="date">
 
-                <label for="page-url">Seite, auf der das Problem auftrat (optional):</label>
-                <input type="text" id="page-url" name="Seite" placeholder="z.B. https://deine-website.de/seite-xy" />
-
-                <label for="browser-info">Welchen Browser nutzt du? (optional)</label>
-                <input type="text" id="browser-info" name="Browser" placeholder="z.B. Chrome, Firefox, Safari" />
-                
-                <button id="my-form-button" type="submit">Senden</button>
-                <p id="my-form-status"></p>
-            </form>
+            <label for="newEventPin">PIN für Scan-Modus:</label>
+            <input id="newEventPin" type="password" placeholder="Mindestens 4 Ziffern">
+            <button onclick="saveNewEvent()">Event erstellen</button>
         </div>
     </div>
 
@@ -766,34 +1528,56 @@
         <button onclick="showExitPinInput()">Scan-Modus beenden</button>
     </div>
 
-    <audio id="successSound" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" preload="auto"></audio>
-    <audio id="errorSound" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" preload="auto"></audio>
+    <audio id="successSound" src="https://assets.mixkit.co/sfx/download/mixkit-positive-notification-495.wav" preload="auto"></audio>
+    <audio id="errorSound" src="https://assets.mixkit.co/sfx/download/mixkit-wrong-answer-fail-1081.wav" preload="auto"></audio>
 
+    <p style="text-align: center; color: #f8f8f8; font-size: 0.9rem; margin-top: 2rem; transition: color 0.5s;">Version: v2.0.0</p>
+    
     <script src="https://unpkg.com/html5-qrcode"></script>
     <script>
-        let eventData = { name: '', date: '', pin: '', tickets: [] };
+        let allEvents = [];
+        let currentEventIndex = -1;
         let html5QrCode;
         let currentStep = 1;
+        let actionType = '';
+        let selectedTicketId = '';
+        let currentFilter = 'all';
+
         const successSound = document.getElementById('successSound');
         const errorSound = document.getElementById('errorSound');
+        const defaultTicketTypes = ["Normal", "VIP", "Early Bird", "Freikarte", "Tageskasse"];
+
+        function playSound(audioElement) {
+            audioElement.currentTime = 0;
+            audioElement.play().catch(e => console.error("Fehler beim Abspielen des Sounds:", e));
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
-            showStep(currentStep);
-            const storedEvent = localStorage.getItem('tickLocalEventData');
-            if (storedEvent) {
-                try {
-                    eventData = JSON.parse(storedEvent);
-                    document.getElementById("eventName").value = eventData.name || '';
-                    document.getElementById("eventDate").value = eventData.date || '';
-                    document.getElementById("eventPin").value = eventData.pin || '';
-                    renderTickets();
-                    showMessage("Vorhandenes Event geladen: " + eventData.name, "success");
-                } catch (e) {
-                    console.error("Fehler beim Laden:", e);
-                    showMessage("Fehler beim Laden alter Event-Daten.", "error");
-                }
+            // Load Dark Mode preference
+            const darkModePreference = localStorage.getItem('darkMode');
+            if (darkModePreference === 'enabled') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('dark-mode-toggle').textContent = '🌙';
+            } else {
+                document.getElementById('dark-mode-toggle').textContent = '☀️';
             }
+            
+            loadEventsFromLocalStorage();
+            showStep(currentStep);
         });
+        
+        function toggleDarkMode() {
+            const body = document.body;
+            body.classList.toggle('dark-mode');
+            const toggleButton = document.getElementById('dark-mode-toggle');
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+                toggleButton.textContent = '🌙';
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+                toggleButton.textContent = '☀️';
+            }
+        }
 
         function showMessage(message, type = 'success') {
             const messageBox = document.getElementById('messageBox');
@@ -812,12 +1596,80 @@
             currentStep = stepNum;
             updateProgressBar();
 
-            if (stepNum === 2 && eventData.name) {
-                document.getElementById('currentEventName').textContent = eventData.name;
+            if (stepNum === 1) {
+                renderEventList();
             }
+            if (stepNum === 2 && currentEventIndex !== -1) {
+                const event = allEvents[currentEventIndex];
+                document.getElementById('currentEventNameDetail').textContent = event.name;
+                document.getElementById("eventName").value = event.name;
+                document.getElementById("eventDate").value = event.date;
+                document.getElementById("eventPin").value = event.pin;
+            }
+            if (stepNum === 3 && currentEventIndex !== -1) {
+                const event = allEvents[currentEventIndex];
+                document.getElementById('currentEventName').textContent = event.name;
+                renderTickets();
+                renderStatistics();
+            }
+        }
+        
+        function renderEventList() {
+            const list = document.getElementById("eventList");
+            if (allEvents.length === 0) {
+                list.innerHTML = "<p style='text-align: center; color: var(--color-text-secondary);'>Keine Events vorhanden. Erstelle ein neues oder lade eines hoch.</p>";
+            } else {
+                list.innerHTML = allEvents.map((event, index) => `
+                    <div class="event-item" onclick="selectEvent(${index})">
+                        <strong>${event.name}</strong>
+                        <span>${event.date}</span>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        function selectEvent(index) {
+            currentEventIndex = index;
+            showStep(2);
+        }
+        
+        function createNewEvent() {
+            document.getElementById('new-event-modal').style.display = 'flex';
+        }
+        
+        function closeNewEventModal() {
+            document.getElementById('new-event-modal').style.display = 'none';
+        }
+        
+        function saveNewEvent() {
+            const eventName = document.getElementById("newEventName").value;
+            const eventDate = document.getElementById("newEventDate").value;
+            const eventPin = document.getElementById("newEventPin").value;
+
+            if (!eventName || !eventDate || !eventPin) {
+                showMessage("Bitte fülle alle Felder für das Event aus!", "warning");
+                return;
+            }
+
+            const newEvent = { 
+                name: eventName, 
+                date: eventDate, 
+                pin: eventPin, 
+                tickets: [] 
+            };
+            allEvents.push(newEvent);
+            currentEventIndex = allEvents.length - 1;
+            saveEventsToLocalStorage();
+            closeNewEventModal();
+            showMessage("Neues Event erfolgreich erstellt!", "success");
+            showStep(2);
         }
 
         function updateProgressBar() {
+            const totalSteps = 4;
+            const progressWidth = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            document.getElementById('progressbar').style.setProperty('--progress-width', `${progressWidth}%`);
+
             document.querySelectorAll('.step-circle').forEach((circle, index) => {
                 const stepNumber = index + 1;
                 circle.classList.remove('active', 'completed');
@@ -828,32 +1680,23 @@
                     circle.classList.add('active');
                 }
             });
-            const progressbar = document.getElementById('progressbar');
-            const progress = (currentStep - 1) / 3 * 100;
-            progressbar.style.setProperty('--progress-width', `${progress}%`);
         }
 
         function nextStep() {
-            if (currentStep === 1) {
-                const eventName = document.getElementById("eventName").value;
-                const eventDate = document.getElementById("eventDate").value;
-                const eventPin = document.getElementById("eventPin").value;
-
-                if (!eventName || !eventDate || !eventPin) {
-                    showMessage("Bitte fülle alle Felder für das Event aus!", "warning");
+            if (currentStep === 2) {
+                const event = allEvents[currentEventIndex];
+                event.name = document.getElementById("eventName").value;
+                event.date = document.getElementById("eventDate").value;
+                event.pin = document.getElementById("eventPin").value;
+                
+                if (!event.name || !event.date || !event.pin) {
+                    showMessage("Bitte fülle alle Event-Details aus!", "warning");
                     return;
                 }
-                eventData.name = eventName;
-                eventData.date = eventDate;
-                eventData.pin = eventPin;
-                if (eventData.tickets.length === 0) {
-                    eventData.tickets = [];
-                }
-                saveEventToLocalStorage();
-                showMessage("Event erfolgreich erstellt!", "success");
-                renderTickets();
+                saveEventsToLocalStorage();
+                showMessage("Event-Details gespeichert!", "success");
             }
-
+            
             if (currentStep < 4) {
                 showStep(currentStep + 1);
             }
@@ -861,45 +1704,147 @@
 
         function prevStep() {
             if (currentStep > 1) {
-                showStep(currentStep - 1);
+                if (currentStep === 2) {
+                    showStep(1);
+                } else if (currentStep === 3) {
+                    showStep(2);
+                } else if (currentStep === 4) {
+                    showStep(3);
+                }
             }
         }
 
         function addTicket() {
-            const name = document.getElementById("ticketName").value.trim();
+            const name = document.getElementById("ticketName").value;
+            const type = document.getElementById("ticketType").value;
             if (!name) {
                 showMessage("Bitte gib einen Namen für das Ticket ein.", "warning");
                 return;
             }
             const id = generateId();
-            eventData.tickets.push({ id, name, checkedIn: false });
+            allEvents[currentEventIndex].tickets.push({ id, name, type, checkedIn: false });
             document.getElementById("ticketName").value = '';
             renderTickets();
-            saveEventToLocalStorage();
+            saveEventsToLocalStorage();
             showMessage("Ticket hinzugefügt!", "success");
+            
+            const newTicketElement = document.querySelector(`[data-ticket-id="${id}"]`);
+            if (newTicketElement) {
+                newTicketElement.classList.add('highlight');
+            }
+        }
+        
+        function importTicketList(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                try {
+                    const fileContent = evt.target.result;
+                    const names = fileContent.split(/\r?\n/).filter(name => name.trim() !== '');
+                    const type = document.getElementById("ticketType").value;
+                    const eventTickets = allEvents[currentEventIndex].tickets;
+
+                    names.forEach(name => {
+                        const id = generateId();
+                        eventTickets.push({ id, name: name.trim(), type, checkedIn: false });
+                    });
+
+                    saveEventsToLocalStorage();
+                    renderTickets();
+                    showMessage(`${names.length} Tickets erfolgreich importiert!`, "success");
+                } catch (err) {
+                    showMessage("Fehler beim Importieren der Datei.", "error");
+                }
+            };
+            reader.readAsText(file);
         }
 
         function generateId() {
             return Date.now().toString(36) + Math.random().toString(36).substr(2);
         }
-
-        function renderTickets() {
+        
+        function filterTickets(filter) {
+            currentFilter = filter;
+            const searchTerm = document.getElementById('searchTickets').value.toLowerCase();
             const list = document.getElementById("ticketList");
-            list.innerHTML = eventData.tickets.map(t => `
-                <div class="ticket-item">
-                    <strong>${t.name}</strong>
+            const eventTickets = allEvents[currentEventIndex].tickets;
+            
+            document.querySelectorAll('.filter-buttons button').forEach(button => {
+                button.classList.remove('active');
+            });
+            document.getElementById(`filter${filter.charAt(0).toUpperCase() + filter.slice(1)}`).classList.add('active');
+            
+            let filteredTickets = eventTickets.filter(t => {
+                const nameMatch = t.name.toLowerCase().includes(searchTerm);
+                if (filter === 'all') return nameMatch;
+                if (filter === 'checkedIn') return nameMatch && t.checkedIn;
+                if (filter === 'pending') return nameMatch && !t.checkedIn;
+            });
+
+            list.innerHTML = filteredTickets.map(t => `
+                <div class="ticket-item" data-ticket-id="${t.id}">
+                    <div class="ticket-name-status">
+                         <strong>${t.name}</strong>
+                         <span style="color: ${t.checkedIn ? '#48bb78' : '#e53e3e'}; font-weight: 500;">
+                           ${t.checkedIn ? '✓ Eingescannt' : '✗ Nicht eingescannt'}
+                         </span>
+                         <span style="color: var(--color-text-secondary); font-weight: 500; font-size: 0.9rem;">
+                            (${t.type})
+                         </span>
+                    </div>
                     <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(t.id)}">
                     <button onclick="shareTicket('${t.id}', '${t.name}')">Ticket teilen</button>
+                    <div class="ticket-action-buttons">
+                        <button class="edit-button" onclick="prepareEditTicket('${t.id}')">Bearbeiten</button>
+                        <button class="delete-button" onclick="prepareDeleteTicket('${t.id}')">Löschen</button>
+                        <button class="toggle-status-button" onclick="prepareToggleStatus('${t.id}')">Status ändern</button>
+                    </div>
                 </div>
             `).join('');
+            
+            updateFilterCounts();
+        }
+        
+        function renderTickets() {
+            if (currentEventIndex !== -1) {
+                 filterTickets(currentFilter);
+            }
+        }
+
+        function updateFilterCounts() {
+            const eventTickets = allEvents[currentEventIndex].tickets;
+            const totalTickets = eventTickets.length;
+            const checkedInTickets = eventTickets.filter(t => t.checkedIn).length;
+            const pending = totalTickets - checkedInTickets;
+
+            document.getElementById('countAll').textContent = totalTickets;
+            document.getElementById('countCheckedIn').textContent = checkedInTickets;
+            document.getElementById('countPending').textContent = pending;
+            
+            renderStatistics();
+        }
+
+        function renderStatistics() {
+            const eventTickets = allEvents[currentEventIndex].tickets;
+            const totalTickets = eventTickets.length;
+            const checkedInTickets = eventTickets.filter(t => t.checkedIn).length;
+            const statisticsHtml = `
+                <p><strong>Gesamt-Tickets:</strong> ${totalTickets}</p>
+                <p><strong>Eingescannte Tickets:</strong> ${checkedInTickets}</p>
+                <p><strong>Ausstehende Tickets:</strong> ${totalTickets - checkedInTickets}</p>
+            `;
+            document.getElementById('ticket-statistics').innerHTML = statisticsHtml;
         }
 
         async function shareTicket(ticketId, ticketName) {
+            const event = allEvents[currentEventIndex];
             if (navigator.share) {
                 try {
                     await navigator.share({
-                        title: `Dein Ticket für ${eventData.name}`,
-                        text: `Hallo ${ticketName}! Hier ist dein Ticket für ${eventData.name}. Deine Ticket-ID ist: ${ticketId}.`,
+                        title: `Dein Ticket für ${event.name}`,
+                        text: `Hallo ${ticketName}! Hier ist dein Ticket für ${event.name}. Deine Ticket-ID ist: ${ticketId}.`,
                     });
                 } catch (error) {
                     showMessage('Fehler beim Teilen des Tickets.', 'warning');
@@ -912,22 +1857,40 @@
                 });
             }
         }
-
-        function downloadEvent() {
-            if (!eventData.name) {
-                showMessage("Bitte erstelle zuerst ein Event.", "warning");
-                return;
+        
+        function downloadCurrentEvent() {
+             const event = allEvents[currentEventIndex];
+             if (!event) {
+                 showMessage("Kein Event ausgewählt.", "warning");
+                 return;
+             }
+             const blob = new Blob([JSON.stringify(event)], { type: "application/json" });
+             const a = document.createElement("a");
+             a.href = URL.createObjectURL(blob);
+             a.download = `${event.name.replace(/\s+/g, '_')}_event.json`;
+             a.click();
+             URL.revokeObjectURL(a.href);
+             showMessage("Event heruntergeladen!", "success");
+        }
+        
+        function exportTicketListAsText() {
+            const event = allEvents[currentEventIndex];
+            if (!event || event.tickets.length === 0) {
+                 showMessage("Keine Tickets zum Exportieren vorhanden.", "warning");
+                 return;
             }
-            const blob = new Blob([JSON.stringify(eventData)], { type: "application/json" });
+            
+            const ticketListText = event.tickets.map(t => `${t.name},${t.type},${t.checkedIn ? 'Eingescannt' : 'Nicht eingescannt'}`).join('\n');
+            const blob = new Blob([ticketListText], { type: "text/plain" });
             const a = document.createElement("a");
             a.href = URL.createObjectURL(blob);
-            a.download = `${eventData.name.replace(/\s+/g, '_')}_event.json`;
+            a.download = `${event.name.replace(/\s+/g, '_')}_tickets.txt`;
             a.click();
             URL.revokeObjectURL(a.href);
-            showMessage("Event heruntergeladen!", "success");
+            showMessage("Ticket-Liste als Text heruntergeladen!", "success");
         }
-
-        function uploadEvent(e) {
+        
+        function uploadEvents(e) {
             const file = e.target.files[0];
             if (!file) return;
             const reader = new FileReader();
@@ -935,174 +1898,192 @@
                 try {
                     const data = JSON.parse(evt.target.result);
                     if (data && data.name && data.pin && Array.isArray(data.tickets)) {
-                        eventData = data;
-                        document.getElementById("eventName").value = eventData.name || '';
-                        document.getElementById("eventDate").value = eventData.date || '';
-                        document.getElementById("eventPin").value = eventData.pin || '';
-                        renderTickets();
-                        saveEventToLocalStorage();
-                        showMessage(`Event "${eventData.name}" erfolgreich geladen!`, "success");
+                        allEvents.push(data);
+                        saveEventsToLocalStorage();
+                        renderEventList();
+                        showMessage("Event geladen: " + data.name, "success");
                     } else {
-                        showMessage("Ungültiges JSON-Format. Bitte lade eine gültige Event-Datei hoch.", "error");
+                        showMessage("Ungültiges Event-Format.", "error");
                     }
-                } catch (error) {
-                    showMessage("Fehler beim Parsen der Datei. Überprüfe das Format.", "error");
+                } catch (err) {
+                    showMessage("Fehler beim Laden der Datei.", "error");
                 }
             };
             reader.readAsText(file);
-            e.target.value = null; // Dateiauswahl zurücksetzen
         }
 
-        function saveEventToLocalStorage() {
-            localStorage.setItem('tickLocalEventData', JSON.stringify(eventData));
+        function saveEventsToLocalStorage() {
+            try {
+                localStorage.setItem('tickLocalEvents', JSON.stringify(allEvents));
+            } catch (e) {
+                showMessage("Fehler beim Speichern der Daten. Der Browser-Speicher ist möglicherweise voll.", "error");
+            }
+        }
+        
+        function loadEventsFromLocalStorage() {
+            const storedEvents = localStorage.getItem('tickLocalEvents');
+            if (storedEvents) {
+                try {
+                    allEvents = JSON.parse(storedEvents);
+                } catch(e) {
+                    console.error("Fehler beim Laden der Events:", e);
+                    allEvents = [];
+                    showMessage("Fehler beim Laden alter Event-Daten.", "error");
+                }
+            } else {
+                 allEvents = [];
+            }
+            renderEventList();
         }
 
         function startScanner() {
-            if (!eventData.name) {
-                showMessage("Bitte erstelle oder lade zuerst ein Event.", "warning");
+            const event = allEvents[currentEventIndex];
+            if (!event.pin) {
+                showMessage("Bitte setze zuerst eine PIN für das Event.", "warning");
                 return;
             }
             document.getElementById('scannerMode').style.display = 'flex';
-            document.body.classList.add('scanner-active');
 
-            const config = {
-                fps: 10,
-                qrbox: { width: 250, height: 250 }
+            const qrboxFunction = function(viewfinderWidth, viewfinderHeight) {
+                const minEdgePercentage = 0.7; // 70% of the smaller edge
+                const minEdgeSize = Math.min(viewfinderWidth, viewfinderHeight);
+                const qrboxSize = Math.floor(minEdgeSize * minEdgePercentage);
+                return {
+                    width: qrboxSize,
+                    height: qrboxSize
+                };
             };
-
+            
+            const config = { fps: 10, qrbox: qrboxFunction };
             html5QrCode = new Html5Qrcode("reader");
             html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanError);
         }
 
-        function onScanSuccess(decodedText, decodedResult) {
-            const ticket = eventData.tickets.find(t => t.id === decodedText);
-            const scanResultDiv = document.getElementById('scanResult');
-            scanResultDiv.style.display = 'block';
+        function onScanSuccess(decodedText) {
+            const event = allEvents[currentEventIndex];
+            const ticket = event.tickets.find(t => t.id === decodedText);
+            const resultElement = document.getElementById('scanResult');
+            
+            html5QrCode.stop();
 
             if (ticket) {
-                if (!ticket.checkedIn) {
-                    ticket.checkedIn = true;
-                    saveEventToLocalStorage();
-                    scanResultDiv.textContent = `Ticket gültig! Willkommen, ${ticket.name}!`;
-                    scanResultDiv.className = 'success';
-                    playFeedback('success');
+                if (ticket.checkedIn) {
+                    resultElement.textContent = `Ticket für ${ticket.name} (${ticket.type}) wurde bereits gescannt.`;
+                    resultElement.classList.add('error');
+                    resultElement.classList.remove('success');
+                    playSound(errorSound);
+                     if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
                 } else {
-                    scanResultDiv.textContent = `Ticket bereits eingelöst von ${ticket.name}.`;
-                    scanResultDiv.className = 'warning';
-                    playFeedback('warning');
+                    ticket.checkedIn = true;
+                    saveEventsToLocalStorage();
+                    resultElement.textContent = `Ticket gültig für: ${ticket.name} (${ticket.type})!`;
+                    resultElement.classList.add('success');
+                    resultElement.classList.remove('error');
+                    playSound(successSound);
+                    if (navigator.vibrate) navigator.vibrate(200);
                 }
             } else {
-                scanResultDiv.textContent = "Ungültiges Ticket!";
-                scanResultDiv.className = 'error';
-                playFeedback('error');
+                resultElement.textContent = 'Ungültiges Ticket!';
+                resultElement.classList.add('error');
+                resultElement.classList.remove('success');
+                playSound(errorSound);
+                if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
             }
+            
+            resultElement.style.display = 'block';
 
-            // Scanner nach erfolgreichem Scan kurz stoppen und dann fortsetzen
-            html5QrCode.pause();
             setTimeout(() => {
-                html5QrCode.resume();
-                scanResultDiv.style.display = 'none';
+                resultElement.style.display = 'none';
+                const qrboxFunction = function(viewfinderWidth, viewfinderHeight) {
+                    const minEdgePercentage = 0.7;
+                    const minEdgeSize = Math.min(viewfinderWidth, viewfinderHeight);
+                    const qrboxSize = Math.floor(minEdgeSize * minEdgePercentage);
+                    return {
+                        width: qrboxSize,
+                        height: qrboxSize
+                    };
+                };
+                html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: qrboxFunction }, onScanSuccess, onScanError);
             }, 3000);
         }
 
         function onScanError(errorMessage) {
-            // console.error("QR Code Error:", errorMessage);
         }
-        
+
         function showExitPinInput() {
-            const exitPinInput = document.getElementById('exitPinInput');
-            const scannerModeButton = document.querySelector('#scannerMode button');
-            
-            if (exitPinInput.style.display === 'none') {
-                exitPinInput.style.display = 'block';
-                scannerModeButton.textContent = 'Bestätigen';
-                exitPinInput.focus();
-                
-                scannerModeButton.onclick = () => {
-                    if (exitPinInput.value === eventData.pin) {
-                        stopScanner();
-                    } else {
-                        showMessage("Falsche PIN.", "error");
-                        exitPinInput.value = '';
-                    }
-                };
+            document.getElementById('exitPinInput').style.display = 'block';
+            document.querySelector('#scannerMode button').onclick = exitScanner;
+        }
+
+        function exitScanner() {
+            const enteredPin = document.getElementById('exitPinInput').value;
+            const event = allEvents[currentEventIndex];
+            if (enteredPin === event.pin) {
+                html5QrCode.stop().then(() => {
+                    document.getElementById('scannerMode').style.display = 'none';
+                    document.getElementById('exitPinInput').style.display = 'none';
+                    document.getElementById('scanResult').style.display = 'none';
+                    showMessage("Scan-Modus beendet.", "success");
+                    document.querySelector('#scannerMode button').onclick = showExitPinInput;
+                    showStep(3); // Zurück zur Ticket-Verwaltung
+                }).catch(err => {
+                    console.error("Fehler beim Stoppen des Scanners:", err);
+                });
             } else {
-                if (exitPinInput.value === eventData.pin) {
-                    stopScanner();
-                } else {
-                    showMessage("Falsche PIN.", "error");
-                    exitPinInput.value = '';
-                }
+                alert("Falsche PIN!");
             }
         }
 
-        function stopScanner() {
-            html5QrCode.stop().then(() => {
-                document.getElementById('scannerMode').style.display = 'none';
-                document.body.classList.remove('scanner-active');
-                document.getElementById('exitPinInput').style.display = 'none';
-                document.getElementById('exitPinInput').value = '';
-                document.getElementById('scanResult').style.display = 'none';
-                const scannerModeButton = document.querySelector('#scannerMode button');
-                scannerModeButton.textContent = 'Scan-Modus beenden';
-                scannerModeButton.onclick = showExitPinInput;
-            }).catch(err => {
-                console.error("Fehler beim Stoppen des Scanners:", err);
-            });
-        }
-        
-        function playFeedback(type) {
-            if (type === 'success') {
-                successSound.play();
-                if (navigator.vibrate) {
-                    navigator.vibrate(200);
-                }
-            } else if (type === 'error') {
-                errorSound.play();
-                if (navigator.vibrate) {
-                    navigator.vibrate([100, 50, 100]);
-                }
-            } else if (type === 'warning') {
-                 if (navigator.vibrate) {
-                    navigator.vibrate([50, 30, 50]);
-                }
-            }
-        }
-        
         function toggleInstructions() {
-            const instructions = document.getElementById('instructions');
-            const button = document.getElementById('instructions-toggle-button');
-            if (instructions.style.display === 'none') {
-                instructions.style.display = 'block';
-                button.textContent = 'Anleitung ausblenden';
+            const instructionsDiv = document.getElementById('instructions');
+            const toggleButton = document.getElementById('instructions-toggle-button');
+            if (instructionsDiv.style.display === 'none') {
+                instructionsDiv.style.display = 'block';
+                toggleButton.textContent = 'Anleitung ausblenden';
             } else {
-                instructions.style.display = 'none';
-                button.textContent = 'Anleitung anzeigen';
+                instructionsDiv.style.display = 'none';
+                toggleButton.textContent = 'Anleitung anzeigen';
             }
         }
 
-        // FEHLER-REPORT-MODAL
-        document.getElementById('open-report-button').addEventListener('click', () => {
-            document.getElementById('report-modal').style.display = 'flex';
-        });
-
-        document.querySelector('.close-button').addEventListener('click', () => {
-            document.getElementById('report-modal').style.display = 'none';
-        });
-
-        window.addEventListener('click', (event) => {
-            const modal = document.getElementById('report-modal');
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        });
-
-        // Formular-Handling mit Formspree
         var form = document.getElementById("my-form");
-        var status = document.getElementById("my-form-status");
+        var openButton = document.getElementById("open-report-button");
+        var modal = document.getElementById("report-modal");
+        var closeButton = document.querySelector(".modal-content .close-button");
+
+        function openReportModal() {
+            modal.style.display = "flex";
+            openButton.classList.remove("expanded");
+        }
+
+        openButton.onclick = function() {
+            if (openButton.classList.contains("expanded")) {
+                openReportModal();
+            } else {
+                openButton.classList.add("expanded");
+                setTimeout(() => {
+                    openButton.classList.remove("expanded");
+                }, 5000);
+            }
+        };
+
+        closeButton.onclick = function() {
+            modal.style.display = "none";
+            document.getElementById("my-form-status").innerHTML = "";
+            form.reset();
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+                document.getElementById("my-form-status").innerHTML = "";
+                form.reset();
+            }
+        }
 
         async function handleSubmit(event) {
             event.preventDefault();
+            var status = document.getElementById("my-form-status");
             var data = new FormData(event.target);
             fetch(event.target.action, {
                 method: form.method,
@@ -1112,10 +2093,10 @@
                 }
             }).then(response => {
                 if (response.ok) {
-                    status.innerHTML = "Danke für deine Meldung!";
+                    status.innerHTML = "Vielen Dank für deinen Fehlerbericht! Wir kümmern uns darum.";
                     form.reset();
                     setTimeout(() => {
-                        document.getElementById('report-modal').style.display = 'none';
+                        modal.style.display = "none";
                         status.innerHTML = "";
                     }, 3000);
                 } else {
@@ -1123,15 +2104,111 @@
                         if (Object.hasOwn(data, 'errors')) {
                             status.innerHTML = data["errors"].map(error => error["message"]).join(", ");
                         } else {
-                            status.innerHTML = "Oops! Es gab ein Problem beim Senden deiner Meldung.";
+                            status.innerHTML = "Hoppla! Es gab ein Problem beim Senden des Formulars.";
                         }
                     })
                 }
             }).catch(error => {
-                status.innerHTML = "Oops! Es gab ein Problem beim Senden deiner Meldung.";
+                status.innerHTML = "Hoppla! Es gab ein Problem beim Senden des Formulars.";
             });
         }
         form.addEventListener("submit", handleSubmit);
+        
+        function openPinModal(action, ticketId) {
+            actionType = action;
+            selectedTicketId = ticketId;
+            document.getElementById('pin-modal').style.display = 'flex';
+        }
+
+        function closePinModal() {
+            document.getElementById('pin-modal').style.display = 'none';
+            document.getElementById('actionPinInput').value = '';
+        }
+        
+        function confirmAction() {
+            const enteredPin = document.getElementById('actionPinInput').value;
+            const event = allEvents[currentEventIndex];
+            if (enteredPin === event.pin) {
+                closePinModal();
+                if (actionType === 'edit') {
+                    openEditModal(selectedTicketId);
+                } else if (actionType === 'delete') {
+                    deleteTicket(selectedTicketId);
+                } else if (actionType === 'toggleStatus') {
+                    toggleTicketStatus(selectedTicketId);
+                }
+            } else {
+                showMessage("Falsche PIN!", "error");
+            }
+        }
+        
+        function prepareEditTicket(ticketId) {
+            openPinModal('edit', ticketId);
+        }
+        
+        function openEditModal(ticketId) {
+            const event = allEvents[currentEventIndex];
+            const ticket = event.tickets.find(t => t.id === ticketId);
+            if (ticket) {
+                document.getElementById('editTicketId').value = ticket.id;
+                document.getElementById('editTicketName').value = ticket.name;
+                document.getElementById('editTicketType').value = ticket.type;
+                document.getElementById('edit-ticket-modal').style.display = 'flex';
+            }
+        }
+
+        function closeEditModal() {
+            document.getElementById('edit-ticket-modal').style.display = 'none';
+            document.getElementById('editTicketName').value = '';
+        }
+        
+        function saveEditedTicket() {
+            const id = document.getElementById('editTicketId').value;
+            const newName = document.getElementById('editTicketName').value;
+            const newType = document.getElementById('editTicketType').value;
+            const eventTickets = allEvents[currentEventIndex].tickets;
+            const ticketIndex = eventTickets.findIndex(t => t.id === id);
+            
+            if (ticketIndex !== -1 && newName) {
+                eventTickets[ticketIndex].name = newName;
+                eventTickets[ticketIndex].type = newType;
+                saveEventsToLocalStorage();
+                renderTickets();
+                closeEditModal();
+                showMessage("Ticket erfolgreich bearbeitet!", "success");
+            } else {
+                showMessage("Name darf nicht leer sein.", "warning");
+            }
+        }
+        
+        function prepareDeleteTicket(ticketId) {
+            if (confirm("Möchtest du dieses Ticket wirklich löschen?")) {
+                openPinModal('delete', ticketId);
+            }
+        }
+        
+        function deleteTicket(ticketId) {
+            const eventTickets = allEvents[currentEventIndex].tickets;
+            allEvents[currentEventIndex].tickets = eventTickets.filter(t => t.id !== ticketId);
+            saveEventsToLocalStorage();
+            renderTickets();
+            showMessage("Ticket erfolgreich gelöscht!", "success");
+        }
+        
+        function prepareToggleStatus(ticketId) {
+             openPinModal('toggleStatus', ticketId);
+        }
+        
+        function toggleTicketStatus(ticketId) {
+             const eventTickets = allEvents[currentEventIndex].tickets;
+             const ticket = eventTickets.find(t => t.id === ticketId);
+             if(ticket) {
+                 ticket.checkedIn = !ticket.checkedIn;
+                 saveEventsToLocalStorage();
+                 renderTickets();
+                 showMessage(`Status für Ticket von ${ticket.name} geändert!`, "success");
+             }
+        }
     </script>
 </body>
 </html>
